@@ -1,0 +1,505 @@
+<title>Time Stats</title>
+<style>
+  :root {
+    color-scheme: light;
+    --page: #ECEEE7; --surface: #F8F9F4; --surface-hover: #F1F3EA;
+    --ink: #1B231B; --ink-secondary: #55604F; --ink-muted: #8B9483; --ink-muted-2: #A8AF9C;
+    --line: #DBDFCF; --line-strong: #C7CDB8;
+    --accent: #A9762F; --accent-ink: #8A5F24; --accent-soft: rgba(169,118,47,0.14);
+    --billable: #1a7a3c; --billable-soft: rgba(26,122,60,0.12);
+    --nonbillable: #6B7566; --nonbillable-soft: rgba(107,117,102,0.12);
+    --good: #0ca30c; --good-soft: rgba(12,163,12,0.12);
+    --warning: #c9860a; --warning-soft: rgba(201,134,10,0.14);
+    --critical: #d03b3b; --neutral-pill: rgba(85,96,79,0.12);
+    --p-blue: #2a78d6; --p-orange: #eb6834; --p-aqua: #1baf7a;
+    --shadow: 0 1px 2px rgba(27,35,27,0.04), 0 1px 1px rgba(27,35,27,0.03);
+    --font-sans: -apple-system, "SF Pro Text", system-ui, "Segoe UI", Helvetica, Arial, sans-serif;
+    --font-mono: ui-monospace, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:where(:not([data-theme="light"])) {
+      color-scheme: dark;
+      --page: #12150F; --surface: #181C14; --surface-hover: #1F2418;
+      --ink: #EDEFE6; --ink-secondary: #ABB39F; --ink-muted: #6E7768; --ink-muted-2: #545C4A;
+      --line: #2A2F22; --line-strong: #3A4030;
+      --accent: #D9A24F; --accent-ink: #E9B872; --accent-soft: rgba(217,162,79,0.18);
+      --billable: #3FCB6E; --billable-soft: rgba(63,203,110,0.16);
+      --nonbillable: #8C978A; --nonbillable-soft: rgba(140,151,138,0.16);
+      --good: #2fbf2f; --good-soft: rgba(47,191,47,0.16);
+      --warning: #e0a52e; --warning-soft: rgba(224,165,46,0.16);
+      --critical: #e0605f; --neutral-pill: rgba(171,179,159,0.14);
+      --p-blue: #3987e5; --p-orange: #d95926; --p-aqua: #199e70;
+      --shadow: 0 1px 2px rgba(0,0,0,0.3);
+    }
+  }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --page: #12150F; --surface: #181C14; --surface-hover: #1F2418;
+    --ink: #EDEFE6; --ink-secondary: #ABB39F; --ink-muted: #6E7768; --ink-muted-2: #545C4A;
+    --line: #2A2F22; --line-strong: #3A4030;
+    --accent: #D9A24F; --accent-ink: #E9B872; --accent-soft: rgba(217,162,79,0.18);
+    --billable: #3FCB6E; --billable-soft: rgba(63,203,110,0.16);
+    --nonbillable: #8C978A; --nonbillable-soft: rgba(140,151,138,0.16);
+    --good: #2fbf2f; --good-soft: rgba(47,191,47,0.16);
+    --warning: #e0a52e; --warning-soft: rgba(224,165,46,0.16);
+    --critical: #e0605f; --neutral-pill: rgba(171,179,159,0.14);
+    --p-blue: #3987e5; --p-orange: #d95926; --p-aqua: #199e70;
+    --shadow: 0 1px 2px rgba(0,0,0,0.3);
+  }
+  :root[data-theme="light"] {
+    color-scheme: light;
+    --page: #ECEEE7; --surface: #F8F9F4; --surface-hover: #F1F3EA;
+    --ink: #1B231B; --ink-secondary: #55604F; --ink-muted: #8B9483; --ink-muted-2: #A8AF9C;
+    --line: #DBDFCF; --line-strong: #C7CDB8;
+    --accent: #A9762F; --accent-ink: #8A5F24; --accent-soft: rgba(169,118,47,0.14);
+    --billable: #1a7a3c; --billable-soft: rgba(26,122,60,0.12);
+    --nonbillable: #6B7566; --nonbillable-soft: rgba(107,117,102,0.12);
+    --good: #0ca30c; --good-soft: rgba(12,163,12,0.12);
+    --warning: #c9860a; --warning-soft: rgba(201,134,10,0.14);
+    --critical: #d03b3b; --neutral-pill: rgba(85,96,79,0.12);
+    --p-blue: #2a78d6; --p-orange: #eb6834; --p-aqua: #1baf7a;
+    --shadow: 0 1px 2px rgba(27,35,27,0.04), 0 1px 1px rgba(27,35,27,0.03);
+  }
+
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--page); color: var(--ink); font-family: var(--font-sans); -webkit-font-smoothing: antialiased; }
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 36px 24px 72px; }
+
+  .masthead { display: flex; justify-content: space-between; align-items: flex-end; gap: 24px; flex-wrap: wrap; padding-bottom: 22px; margin-bottom: 26px; border-bottom: 1px solid var(--line-strong); }
+  .masthead-text .eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; color: var(--accent-ink); }
+  .masthead-text h1 { font-size: 27px; font-weight: 700; letter-spacing: -0.012em; margin: 5px 0 7px; text-wrap: balance; }
+  .masthead-text .subtitle { font-size: 13px; color: var(--ink-secondary); max-width: 56ch; line-height: 1.5; }
+  .period-badge { flex: none; display: flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 600; color: var(--ink); background: var(--surface); border: 1px solid var(--line-strong); border-radius: 999px; padding: 7px 14px 7px 10px; box-shadow: var(--shadow); }
+  .period-badge .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); flex: none; }
+
+  .stat-row { display: grid; grid-template-columns: 1.3fr 1fr 1fr 1fr; gap: 14px; margin-bottom: 20px; }
+  @media (max-width: 860px) { .stat-row { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 480px) { .stat-row { grid-template-columns: 1fr; } }
+  .stat-tile { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 15px 17px; display: flex; flex-direction: column; gap: 9px; box-shadow: var(--shadow); }
+  .stat-tile.hero { background: linear-gradient(155deg, var(--accent-soft), var(--surface) 60%); border-color: var(--line-strong); }
+  .stat-label { font-size: 11px; font-weight: 600; letter-spacing: 0.02em; color: var(--ink-muted); text-transform: uppercase; }
+  .stat-value { font-size: 30px; font-weight: 700; letter-spacing: -0.01em; line-height: 1; }
+  .stat-tile.hero .stat-value { color: var(--accent-ink); font-size: 34px; }
+  .stat-value .unit { font-size: 15px; font-weight: 600; color: var(--ink-secondary); margin-left: 3px; }
+  .stat-meta { font-size: 11.5px; color: var(--ink-secondary); }
+  .meter-track { height: 6px; border-radius: 3px; background: var(--line); overflow: hidden; }
+  .meter-fill { height: 100%; border-radius: 3px; background: var(--accent); }
+
+  .columns { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 20px; align-items: start; margin-bottom: 20px; }
+  @media (max-width: 900px) { .columns { grid-template-columns: 1fr; } }
+
+  .ledger-sheet { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 4px 22px 6px; box-shadow: var(--shadow); }
+  .ledger-sheet.full { padding: 4px 0 6px; overflow: hidden; }
+  .sheet-head { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; padding: 18px 22px 14px; }
+  .ledger-sheet.full .sheet-head { padding: 18px 22px 14px; flex-wrap: wrap; }
+  .sheet-head h2 { font-size: 15px; font-weight: 700; margin: 0; letter-spacing: -0.005em; }
+  .sheet-head .sheet-sub { font-size: 11.5px; color: var(--ink-muted); }
+
+  .section { padding: 18px 22px; border-top: 1px solid var(--line); }
+  .ledger-sheet > .section:first-of-type { border-top: none; padding-top: 0; }
+  .section-title { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; margin-bottom: 13px; }
+  .section-title .label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ink-secondary); }
+
+  .legend { display: flex; gap: 13px; flex-wrap: wrap; font-size: 11px; color: var(--ink-secondary); }
+  .legend-item { display: flex; align-items: center; gap: 5px; white-space: nowrap; }
+  .legend-item .swatch { width: 8px; height: 8px; border-radius: 2px; flex: none; }
+
+  .chart-box { position: relative; }
+  .chart-box svg { display: block; width: 100%; overflow: visible; }
+  .tooltip { position: absolute; pointer-events: none; opacity: 0; z-index: 8; background: var(--ink); color: var(--page); border-radius: 7px; padding: 9px 11px; font-size: 11.5px; line-height: 1.45; min-width: 140px; transform: translate(-50%, calc(-100% - 10px)); transition: opacity .08s ease; box-shadow: 0 4px 14px rgba(0,0,0,0.22); }
+  .tooltip .tt-title { font-weight: 700; margin-bottom: 4px; }
+  .tooltip .tt-row { display: flex; align-items: center; gap: 10px; justify-content: space-between; }
+  .tooltip .tt-row + .tt-row { margin-top: 2px; }
+  .tooltip .tt-key { display: flex; align-items: center; gap: 5px; color: rgba(248,249,244,0.75); }
+  .tooltip .tt-key .stroke { width: 9px; height: 0; border-top: 2px solid; flex: none; }
+  .tooltip .tt-val { font-weight: 700; font-variant-numeric: tabular-nums; }
+  .bar-seg, .pie-slice { transition: filter .1s ease; cursor: default; }
+  .bar-seg:hover, .pie-slice:hover { filter: brightness(1.08); }
+
+  .pies { display: flex; flex-direction: column; gap: 22px; }
+  .pie-row { display: flex; align-items: center; gap: 18px; }
+  .pie-row .pie-svg-box { flex: none; width: 128px; height: 128px; position: relative; }
+  .pie-center { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; pointer-events: none; }
+  .pie-center .pc-val { font-size: 17px; font-weight: 700; }
+  .pie-center .pc-lbl { font-size: 9px; color: var(--ink-muted); text-transform: uppercase; letter-spacing: 0.04em; }
+  .pie-legend { display: flex; flex-direction: column; gap: 7px; font-size: 12px; flex: 1; min-width: 0; }
+  .pie-legend .pl-row { display: flex; align-items: center; gap: 7px; }
+  .pie-legend .swatch { width: 9px; height: 9px; border-radius: 2px; flex: none; }
+  .pie-legend .pl-name { color: var(--ink-secondary); flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .pie-legend .pl-val { font-weight: 600; font-variant-numeric: tabular-nums; color: var(--ink); }
+
+  table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+  thead th { text-align: left; font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; color: var(--ink-muted); padding: 0 8px 8px 0; border-bottom: 1px solid var(--line); }
+  thead th.num, td.num { text-align: right; font-variant-numeric: tabular-nums; }
+  tbody td { padding: 9px 8px 9px 0; border-bottom: 1px solid var(--line); vertical-align: middle; }
+  tbody tr:last-child td { border-bottom: none; }
+  .table-scroll { overflow-x: auto; }
+  .cell-item { color: var(--ink); }
+
+  .pill { display: inline-flex; align-items: center; gap: 4px; font-size: 10.5px; font-weight: 700; padding: 3px 8px; border-radius: 999px; text-transform: uppercase; letter-spacing: 0.02em; white-space: nowrap; }
+  .pill.billable { background: var(--billable-soft); color: var(--billable); }
+  .pill.nonbillable { background: var(--nonbillable-soft); color: var(--nonbillable); }
+  .pill .pilldot { width: 5px; height: 5px; border-radius: 50%; background: currentColor; flex: none; }
+
+  .footer-note { margin-top: 26px; padding-top: 16px; border-top: 1px solid var(--line-strong); font-size: 11.5px; color: var(--ink-muted); line-height: 1.6; display: flex; gap: 8px; }
+  .footer-note .tag { flex: none; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; color: var(--accent-ink); background: var(--accent-soft); padding: 2px 7px; border-radius: 5px; margin-top: 1px; }
+
+  /* ---- Timesheet Detail grid (adapted) ---- */
+  .grid-toolbar { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .view-toggle { display: flex; border: 1px solid var(--line-strong); border-radius: 7px; overflow: hidden; }
+  .vt-btn { padding: 5px 13px; font-size: 12px; font-weight: 600; cursor: pointer; background: var(--surface); border: none; color: var(--ink-secondary); }
+  .vt-btn.active { background: var(--ink); color: var(--page); }
+  .vt-btn:first-child { border-right: 1px solid var(--line-strong); }
+  .nav-group { display: flex; align-items: center; gap: 6px; }
+  .nav-btn { background: var(--page); border: 1px solid var(--line-strong); color: var(--ink-secondary); padding: 5px 10px; border-radius: 6px; cursor: pointer; font-size: 13px; line-height: 1; }
+  .nav-btn:hover { background: var(--surface-hover); }
+  .nav-btn.sm { font-size: 10.5px; padding: 5px 9px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.03em; }
+  .nav-label { font-size: 13px; font-weight: 700; color: var(--ink); min-width: 168px; text-align: center; }
+
+  .grid-summary { display: flex; background: var(--page); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+  .gs-item { display: flex; flex-direction: column; align-items: center; padding: 9px 20px; border-right: 1px solid var(--line); gap: 2px; }
+  .gs-label { color: var(--ink-muted); font-size: 9.5px; text-transform: uppercase; letter-spacing: 0.05em; }
+  .gs-value { font-size: 15px; font-weight: 700; color: var(--ink); font-variant-numeric: tabular-nums; }
+  .gs-value.billable { color: var(--billable); }
+  .gs-value.nonbillable { color: var(--nonbillable); }
+
+  .grid-wrap { overflow-x: auto; padding: 14px 22px 20px; }
+  .grid-wrap table { table-layout: fixed; border-collapse: collapse; }
+  .grid-wrap th { background: var(--page); padding: 7px 4px; font-size: 9.5px; font-weight: 700; color: var(--ink-muted); text-transform: uppercase; letter-spacing: 0.03em; border-bottom: 2px solid var(--line); text-align: center; white-space: nowrap; }
+  .grid-wrap th.th-name { text-align: left; padding-left: 10px; }
+  .grid-wrap th.th-total { text-align: right; padding-right: 8px; }
+  .grid-wrap th.weekend { background: var(--surface-hover); }
+  .grid-wrap .col-name { position: sticky; left: 0; z-index: 5; background: var(--surface); }
+  .grid-wrap th.col-name { background: var(--page); z-index: 6; }
+  .grid-wrap .col-total { position: sticky; right: 0; z-index: 5; background: var(--surface); }
+  .grid-wrap th.col-total-h { background: var(--page); z-index: 6; position: sticky; right: 0; }
+  .grid-wrap td { vertical-align: middle; font-variant-numeric: tabular-nums; }
+  .proj-row td { border-bottom: 1px solid var(--line); border-top: 2px solid var(--line); }
+  .proj-row:first-child td { border-top: none; }
+  .proj-name { padding: 7px 8px 7px 10px; font-weight: 700; font-size: 12px; border-left: 3px solid transparent; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .proj-name.billable { border-left-color: var(--billable); }
+  .proj-name.nonbillable { border-left-color: var(--ink-muted-2); }
+  .proj-row .day-cell, .proj-row .total-cell-td { font-weight: 700; font-size: 12px; }
+  .act-row td { border-bottom: 1px solid var(--line); background: var(--surface-hover); }
+  .act-row:last-of-type td { border-bottom: 1px solid var(--line-strong); }
+  .act-name { padding: 5px 8px 5px 20px; font-size: 11px; color: var(--ink-secondary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .act-row .day-cell { font-size: 11px; color: var(--ink-secondary); }
+  .act-row .total-cell-td { font-size: 11px; color: var(--ink-secondary); font-weight: 600; }
+  .day-cell { text-align: center; padding: 5px 2px; white-space: nowrap; position: relative; }
+  .day-cell.weekend-col { background: rgba(0,0,0,0.02); }
+  .day-cell.zero { color: var(--ink-muted-2); }
+  .day-cell.billable-val { color: var(--billable); }
+  .day-cell.nonbillable-val { color: var(--ink-secondary); }
+  .day-cell.has-note::after { content: ''; position: absolute; top: 3px; right: 4px; width: 0; height: 0; border-left: 5px solid transparent; border-top: 5px solid var(--accent); opacity: 0.7; }
+  .total-cell-td { text-align: right; padding: 5px 8px; font-weight: 700; white-space: nowrap; border-left: 1px solid var(--line); }
+  .total-cell-td.zero { color: var(--ink-muted-2); }
+  .total-cell-td.billable-val { color: var(--billable); }
+  .total-row td { background: var(--page); border-top: 2px solid var(--line-strong); font-weight: 700; text-align: center; font-size: 12px; color: var(--ink); padding: 6px 3px; }
+  .total-row td:first-child { text-align: left; padding-left: 10px; font-size: 10px; text-transform: uppercase; letter-spacing: 0.04em; color: var(--ink-muted); }
+  .total-row td:last-child { text-align: right; padding-right: 8px; font-size: 13px; }
+  .total-row td.weekend-col { background: var(--surface-hover); }
+  .empty-state { text-align: center; padding: 36px 20px; color: var(--ink-muted); }
+  .grid-tip { position: fixed; background: var(--ink); color: var(--page); padding: 7px 11px; border-radius: 7px; font-size: 11px; line-height: 1.6; max-width: 260px; pointer-events: none; z-index: 999; opacity: 0; transition: opacity 0.15s; white-space: pre-wrap; box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
+  .grid-tip.show { opacity: 1; }
+
+  @media (prefers-reduced-motion: reduce) { .bar-seg, .pie-slice, .tooltip { transition: none; } }
+
+  .nav-strip { display: flex; gap: 8px; margin-bottom: 22px; flex-wrap: wrap; }
+  .nav-pill { font-size: 11.5px; font-weight: 600; padding: 6px 13px; border-radius: 999px; border: 1px solid var(--line-strong); background: var(--surface); color: var(--ink-secondary); text-decoration: none; transition: background .1s, color .1s; }
+  .nav-pill:hover { background: var(--surface-hover); }
+  .nav-pill.active { background: var(--ink); color: var(--page); border-color: var(--ink); }
+  .nav-pill.home { color: var(--accent-ink); font-weight: 700; }
+</style>
+
+<div class="wrap">
+
+<div class="nav-strip"><a class="nav-pill" href="index.html">Ops Ledger</a><a class="nav-pill active" href="time-stats.html">Stats</a><a class="nav-pill" href="time-detail.html">Detail</a><a class="nav-pill" href="time-kantata.html">Kantata</a><a class="nav-pill" href="tasks.html">Tasks</a></div>
+
+  <div class="masthead">
+    <div class="masthead-text">
+      <div class="eyebrow">Ops Ledger &middot; Josiah Hobson</div>
+      <h1>Time &mdash; Stats</h1>
+      <div class="subtitle">Billable mix and activity split, at a glance. See Detail for day-by-day breakdowns and Kantata for logging time.</div>
+    </div>
+    <div class="period-badge"><span class="dot"></span>Synced Aug 9, 2026 &middot; 3:00pm</div>
+  </div>
+
+
+  <div class="stat-row">
+    <div class="stat-tile hero">
+      <div class="stat-label">% Billable</div>
+      <div class="stat-value">62.2<span class="unit">%</span></div>
+      <div class="meter-track"><div class="meter-fill" style="width:62.2%"></div></div>
+      <div class="stat-meta">253h billable of 406.8h logged</div>
+    </div>
+    <div class="stat-tile">
+      <div class="stat-label">Total logged</div>
+      <div class="stat-value">406.8<span class="unit">hrs</span></div>
+      <div class="stat-meta">10 weeks, 5 clients</div>
+    </div>
+    <div class="stat-tile">
+      <div class="stat-label">Billable hours</div>
+      <div class="stat-value" style="color:var(--billable)">253<span class="unit">hrs</span></div>
+      <div class="stat-meta">client-facing work</div>
+    </div>
+    <div class="stat-tile">
+      <div class="stat-label">Non-billable hours</div>
+      <div class="stat-value" style="color:var(--nonbillable)">153.8<span class="unit">hrs</span></div>
+      <div class="stat-meta">G&amp;A / internal</div>
+    </div>
+  </div>
+
+  <div class="columns">
+    <div class="ledger-sheet">
+      <div class="sheet-head"><h2>Hours by billable status</h2><span class="sheet-sub">weekly</span></div>
+      <div class="section">
+        <div class="legend">
+          <span class="legend-item"><span class="swatch" style="background:var(--billable)"></span>Billable</span>
+          <span class="legend-item"><span class="swatch" style="background:var(--nonbillable)"></span>Non-billable</span>
+        </div>
+        <div class="chart-box" id="chart-weekly" style="height:210px; margin-top:14px;">
+          <div class="tooltip" id="tt-weekly"></div>
+        </div>
+      </div>
+      <div class="section">
+        <div class="section-title"><span class="label">Top projects &mdash; last 10 weeks</span></div>
+        <div class="table-scroll">
+          <table>
+            <thead><tr><th>Client / project</th><th class="num">Hours</th><th>Status</th></tr></thead>
+            <tbody id="tbl-projects"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="ledger-sheet">
+      <div class="sheet-head"><h2>Activity mix</h2><span class="sheet-sub">by billable status</span></div>
+      <div class="section">
+        <div class="pies" id="pies"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer-note">
+    <span class="tag">Auto</span>
+    <span>Regenerated nightly from <code>time_log.json</code>. See <a href="time-detail.html" style="color:inherit;">Time Detail</a> for day-by-day breakdowns and <a href="time-kantata.html" style="color:inherit;">Kantata Timesheet</a> for logging time.</span>
+  </div>
+
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  // Deferred to DOMContentLoaded: chart-weekly's clientWidth must reflect the
+  // final grid layout, not a mid-parse measurement, or the SVG viewBox bakes
+  // in a too-narrow width and every bar/label renders squeezed into a sliver.
+  var root = document.documentElement;
+  function cssVar(name) { return getComputedStyle(root).getPropertyValue(name).trim(); }
+
+  // ===================== Reporting section =====================
+
+  var WEEKLY = [{"label": "Jun 1", "full": "Week of Jun 1", "billable": 30.5, "nonbillable": 16.5, "partial": false}, {"label": "Jun 8", "full": "Week of Jun 8", "billable": 34.0, "nonbillable": 11.0, "partial": false}, {"label": "Jun 15", "full": "Week of Jun 15", "billable": 30.5, "nonbillable": 7.0, "partial": false}, {"label": "Jun 22", "full": "Week of Jun 22", "billable": 29.0, "nonbillable": 14.5, "partial": false}, {"label": "Jun 29", "full": "Week of Jun 29", "billable": 42.0, "nonbillable": 6.5, "partial": false}, {"label": "Jul 6", "full": "Week of Jul 6", "billable": 31.0, "nonbillable": 16.5, "partial": false}, {"label": "Jul 13", "full": "Week of Jul 13", "billable": 7.5, "nonbillable": 1.0, "partial": false}, {"label": "Jul 20", "full": "Week of Jul 20", "billable": 21.5, "nonbillable": 22.0, "partial": false}, {"label": "Jul 27", "full": "Week of Jul 27", "billable": 20.5, "nonbillable": 22.0, "partial": false}, {"label": "Aug 3", "full": "Week of Aug 3", "billable": 6.5, "nonbillable": 36.75, "partial": false}];
+
+  var PROJECTS = [{"name": "G&A / Admin Prod Dept", "hours": 132.0, "billable": false}, {"name": "OKC / Foreword FD", "hours": 96.25, "billable": true}, {"name": "Alamo / VCM Linear", "hours": 48.75, "billable": true}, {"name": "Alamo / VCM Interactive", "hours": 48.75, "billable": true}, {"name": "NSM / MPD Showcase", "hours": 28.25, "billable": true}, {"name": "G&A / L&D General", "hours": 16.25, "billable": false}, {"name": "J&J / AV 112", "hours": 13.5, "billable": true}, {"name": "J&J / Promo", "hours": 5.75, "billable": true}];
+
+  var PIE_BILLABLE = {"title": "Billable", "total": 253.0, "slices": [{"label": "Meetings", "hours": 83.75, "color": "--p-blue"}, {"label": "Comms", "hours": 78.5, "color": "--p-orange"}, {"label": "Planning", "hours": 65.25, "color": "--p-aqua"}, {"label": "Other", "hours": 25.5, "color": "--ink-muted-2"}]};
+  var PIE_NONBILLABLE = {"title": "Non-billable", "total": 153.75, "slices": [{"label": "Mgmt", "hours": 68.75, "color": "--p-orange"}, {"label": "Meetings", "hours": 25.75, "color": "--p-blue"}, {"label": "Planning", "hours": 16.5, "color": "--p-aqua"}, {"label": "Other", "hours": 42.75, "color": "--ink-muted-2"}]};
+
+  // ---- stacked bar: billable vs non-billable ----
+  (function () {
+    var box = document.getElementById('chart-weekly');
+    var tt = document.getElementById('tt-weekly');
+    var W = box.clientWidth || 500, H = 210;
+    var padTop = 10, padBottom = 22, padLeft = 6, padRight = 6;
+    var plotH = H - padTop - padBottom;
+    var n = WEEKLY.length, gap = 10;
+    var bandW = (W - padLeft - padRight) / n;
+    var barW = Math.min(26, bandW - gap);
+
+    var maxTotal = 0;
+    WEEKLY.forEach(function (w) { var t = w.billable + w.nonbillable; if (t > maxTotal) maxTotal = t; });
+    maxTotal = Math.ceil(maxTotal / 10) * 10;
+
+    var svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svg.setAttribute('viewBox', '0 0 ' + W + ' ' + H);
+    svg.setAttribute('height', H);
+
+    [0, 0.5, 1].forEach(function (f) {
+      var y = padTop + plotH * (1 - f);
+      var line = document.createElementNS(svg.namespaceURI, 'line');
+      line.setAttribute('x1', padLeft); line.setAttribute('x2', W - padRight);
+      line.setAttribute('y1', y); line.setAttribute('y2', y);
+      line.setAttribute('stroke', cssVar('--line')); line.setAttribute('stroke-width', '1');
+      svg.appendChild(line);
+      var lbl = document.createElementNS(svg.namespaceURI, 'text');
+      lbl.setAttribute('x', padLeft); lbl.setAttribute('y', y - 4);
+      lbl.setAttribute('font-size', '9.5'); lbl.setAttribute('fill', cssVar('--ink-muted'));
+      lbl.textContent = Math.round(maxTotal * f) + 'h';
+      svg.appendChild(lbl);
+    });
+
+    WEEKLY.forEach(function (w, i) {
+      var bx = padLeft + i * bandW + (bandW - barW) / 2;
+      var segs = [
+        { key: 'nonbillable', val: w.nonbillable, color: cssVar('--nonbillable') },
+        { key: 'billable', val: w.billable, color: cssVar('--billable') }
+      ];
+      var yCursor = padTop + plotH;
+      var placed = [];
+      segs.forEach(function (s) {
+        var h = (s.val / maxTotal) * plotH;
+        placed.push({ s: s, y: yCursor - h, h: h });
+        yCursor -= h;
+      });
+      var visible = placed.filter(function (p) { return p.h > 0; });
+      visible.forEach(function (p, gi) {
+        var isTop = gi === visible.length - 1;
+        var gap2 = 2;
+        var h = Math.max(p.h - gap2, 1);
+        var y = p.y + gap2;
+        var rect = document.createElementNS(svg.namespaceURI, 'rect');
+        rect.setAttribute('x', bx); rect.setAttribute('width', barW);
+        rect.setAttribute('y', y); rect.setAttribute('height', h);
+        rect.setAttribute('fill', p.s.color);
+        rect.setAttribute('opacity', w.partial ? '0.55' : '1');
+        rect.setAttribute('class', 'bar-seg');
+        if (isTop) { rect.setAttribute('rx', '4'); rect.setAttribute('ry', '4'); }
+        svg.appendChild(rect);
+      });
+      var hit = document.createElementNS(svg.namespaceURI, 'rect');
+      hit.setAttribute('x', bx - gap / 2); hit.setAttribute('width', barW + gap);
+      hit.setAttribute('y', padTop); hit.setAttribute('height', plotH);
+      hit.setAttribute('fill', 'transparent');
+      hit.addEventListener('mouseenter', function () { showTooltip(w, bx + barW / 2); });
+      hit.addEventListener('mousemove', function () { showTooltip(w, bx + barW / 2); });
+      hit.addEventListener('mouseleave', hideTooltip);
+      svg.appendChild(hit);
+
+      var xl = document.createElementNS(svg.namespaceURI, 'text');
+      xl.setAttribute('x', bx + barW / 2); xl.setAttribute('y', H - 6);
+      xl.setAttribute('font-size', '10'); xl.setAttribute('fill', cssVar('--ink-muted'));
+      xl.setAttribute('text-anchor', 'middle');
+      xl.textContent = w.label;
+      svg.appendChild(xl);
+    });
+
+    box.appendChild(svg);
+
+    function showTooltip(w, cx) {
+      var pct = Math.round(w.billable / (w.billable + w.nonbillable) * 100);
+      tt.innerHTML =
+        '<div class="tt-title">' + w.full + '</div>' +
+        '<div class="tt-row"><span class="tt-key"><span class="stroke" style="border-color:' + cssVar('--billable') + '"></span>Billable</span><span class="tt-val">' + w.billable.toFixed(2).replace(/0$/, '').replace(/\.$/, '') + 'h</span></div>' +
+        '<div class="tt-row"><span class="tt-key"><span class="stroke" style="border-color:' + cssVar('--nonbillable') + '"></span>Non-billable</span><span class="tt-val">' + w.nonbillable.toFixed(2).replace(/0$/, '').replace(/\.$/, '') + 'h</span></div>' +
+        '<div class="tt-row"><span class="tt-key">% Billable</span><span class="tt-val">' + pct + '%</span></div>';
+      tt.style.left = cx + 'px'; tt.style.top = '0px'; tt.style.opacity = '1';
+    }
+    function hideTooltip() { tt.style.opacity = '0'; }
+  })();
+
+  // ---- top projects table ----
+  (function () {
+    var tbody = document.getElementById('tbl-projects');
+    PROJECTS.forEach(function (p) {
+      var tr = document.createElement('tr');
+      var tdName = document.createElement('td');
+      tdName.innerHTML = '<span class="cell-item"></span>';
+      tdName.querySelector('.cell-item').textContent = p.name;
+      var tdHours = document.createElement('td');
+      tdHours.className = 'num';
+      tdHours.style.fontWeight = '600';
+      tdHours.textContent = (p.hours % 1 === 0 ? p.hours.toFixed(0) : p.hours.toFixed(2)) + 'h';
+      var tdStatus = document.createElement('td');
+      var pill = document.createElement('span');
+      pill.className = 'pill ' + (p.billable ? 'billable' : 'nonbillable');
+      pill.innerHTML = '<span class="pilldot"></span>' + (p.billable ? 'Billable' : 'Internal');
+      tdStatus.appendChild(pill);
+      tr.appendChild(tdName); tr.appendChild(tdHours); tr.appendChild(tdStatus);
+      tbody.appendChild(tr);
+    });
+  })();
+
+  // ---- pies: activity mix by billable status ----
+  (function () {
+    var host = document.getElementById('pies');
+    [PIE_BILLABLE, PIE_NONBILLABLE].forEach(function (pie) {
+      var row = document.createElement('div');
+      row.className = 'pie-row';
+
+      var svgBox = document.createElement('div');
+      svgBox.className = 'pie-svg-box';
+      var svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+      svg.setAttribute('viewBox', '0 0 128 128');
+      svg.setAttribute('width', '128'); svg.setAttribute('height', '128');
+      var r = 46, cx = 64, cy = 64, strokeW = 26;
+      var circ = 2 * Math.PI * r;
+      var offset = 0;
+
+      // Rotate the whole slice group -90deg so the first slice starts at 12 o'clock
+      // instead of the default 3 o'clock; each circle's own dashoffset is then a
+      // plain cumulative "-offset", never combined with the rotation math.
+      var g = document.createElementNS(svg.namespaceURI, 'g');
+      g.setAttribute('transform', 'rotate(-90 ' + cx + ' ' + cy + ')');
+      svg.appendChild(g);
+
+      pie.slices.forEach(function (s) {
+        if (s.hours <= 0) return;
+        var frac = s.hours / pie.total;
+        var gapLen = Math.min(2, circ * 0.008);
+        var len = Math.max(circ * frac - gapLen, 0);
+        var circle = document.createElementNS(svg.namespaceURI, 'circle');
+        circle.setAttribute('cx', cx); circle.setAttribute('cy', cy); circle.setAttribute('r', r);
+        circle.setAttribute('fill', 'none');
+        circle.setAttribute('stroke', cssVar(s.color));
+        circle.setAttribute('stroke-width', strokeW);
+        circle.setAttribute('stroke-dasharray', len + ' ' + (circ - len));
+        circle.setAttribute('stroke-dashoffset', -offset);
+        circle.setAttribute('class', 'pie-slice');
+        circle.style.cursor = 'default';
+        circle.addEventListener('mouseenter', function (e) { showPieTip(e, pie, s); });
+        circle.addEventListener('mousemove', function (e) { showPieTip(e, pie, s); });
+        circle.addEventListener('mouseleave', hidePieTip);
+        g.appendChild(circle);
+        offset += circ * frac;
+      });
+
+      svgBox.appendChild(svg);
+      var center = document.createElement('div');
+      center.className = 'pie-center';
+      center.innerHTML = '<div class="pc-val">' + Math.round(pie.total) + 'h</div><div class="pc-lbl">' + pie.title + '</div>';
+      svgBox.appendChild(center);
+
+      var legend = document.createElement('div');
+      legend.className = 'pie-legend';
+      pie.slices.forEach(function (s) {
+        if (s.hours <= 0) return;
+        var pct = Math.round(s.hours / pie.total * 100);
+        var lr = document.createElement('div');
+        lr.className = 'pl-row';
+        var sw = document.createElement('span'); sw.className = 'swatch'; sw.style.background = cssVar(s.color);
+        var name = document.createElement('span'); name.className = 'pl-name'; name.textContent = s.label;
+        var val = document.createElement('span'); val.className = 'pl-val'; val.textContent = pct + '%';
+        lr.appendChild(sw); lr.appendChild(name); lr.appendChild(val);
+        legend.appendChild(lr);
+      });
+
+      row.appendChild(svgBox); row.appendChild(legend);
+      host.appendChild(row);
+    });
+
+    var floatTip = document.createElement('div');
+    floatTip.className = 'tooltip';
+    floatTip.style.position = 'fixed';
+    document.body.appendChild(floatTip);
+    function showPieTip(e, pie, s) {
+      var pct = Math.round(s.hours / pie.total * 100);
+      floatTip.innerHTML = '<div class="tt-title">' + pie.title + ' &middot; ' + s.label + '</div>' +
+        '<div class="tt-row"><span class="tt-val">' + s.hours.toFixed(2).replace(/0$/, '').replace(/\.$/, '') + 'h &middot; ' + pct + '%</span></div>';
+      floatTip.style.left = e.clientX + 'px';
+      floatTip.style.top = e.clientY + 'px';
+      floatTip.style.opacity = '1';
+    }
+    function hidePieTip() { floatTip.style.opacity = '0'; }
+  })();
+
+});
+</script>

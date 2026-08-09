@@ -1,0 +1,514 @@
+<title>Kantata Timesheet</title>
+<style>
+  :root {
+    color-scheme: light;
+    --page: #ECEEE7; --surface: #F8F9F4; --surface-hover: #F1F3EA;
+    --ink: #1B231B; --ink-secondary: #55604F; --ink-muted: #8B9483; --ink-muted-2: #A8AF9C;
+    --line: #DBDFCF; --line-strong: #C7CDB8;
+    --accent: #A9762F; --accent-ink: #8A5F24; --accent-soft: rgba(169,118,47,0.14);
+    --billable: #1a7a3c; --billable-soft: rgba(26,122,60,0.12);
+    --nonbillable: #6B7566; --nonbillable-soft: rgba(107,117,102,0.12);
+    --good: #0ca30c; --good-soft: rgba(12,163,12,0.12);
+    --warning: #c9860a; --warning-soft: rgba(201,134,10,0.14);
+    --critical: #d03b3b; --neutral-pill: rgba(85,96,79,0.12);
+    --p-blue: #2a78d6; --p-orange: #eb6834; --p-aqua: #1baf7a;
+    --shadow: 0 1px 2px rgba(27,35,27,0.04), 0 1px 1px rgba(27,35,27,0.03);
+    --font-sans: -apple-system, "SF Pro Text", system-ui, "Segoe UI", Helvetica, Arial, sans-serif;
+    --font-mono: ui-monospace, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:where(:not([data-theme="light"])) {
+      color-scheme: dark;
+      --page: #12150F; --surface: #181C14; --surface-hover: #1F2418;
+      --ink: #EDEFE6; --ink-secondary: #ABB39F; --ink-muted: #6E7768; --ink-muted-2: #545C4A;
+      --line: #2A2F22; --line-strong: #3A4030;
+      --accent: #D9A24F; --accent-ink: #E9B872; --accent-soft: rgba(217,162,79,0.18);
+      --billable: #3FCB6E; --billable-soft: rgba(63,203,110,0.16);
+      --nonbillable: #8C978A; --nonbillable-soft: rgba(140,151,138,0.16);
+      --good: #2fbf2f; --good-soft: rgba(47,191,47,0.16);
+      --warning: #e0a52e; --warning-soft: rgba(224,165,46,0.16);
+      --critical: #e0605f; --neutral-pill: rgba(171,179,159,0.14);
+      --p-blue: #3987e5; --p-orange: #d95926; --p-aqua: #199e70;
+      --shadow: 0 1px 2px rgba(0,0,0,0.3);
+    }
+  }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --page: #12150F; --surface: #181C14; --surface-hover: #1F2418;
+    --ink: #EDEFE6; --ink-secondary: #ABB39F; --ink-muted: #6E7768; --ink-muted-2: #545C4A;
+    --line: #2A2F22; --line-strong: #3A4030;
+    --accent: #D9A24F; --accent-ink: #E9B872; --accent-soft: rgba(217,162,79,0.18);
+    --billable: #3FCB6E; --billable-soft: rgba(63,203,110,0.16);
+    --nonbillable: #8C978A; --nonbillable-soft: rgba(140,151,138,0.16);
+    --good: #2fbf2f; --good-soft: rgba(47,191,47,0.16);
+    --warning: #e0a52e; --warning-soft: rgba(224,165,46,0.16);
+    --critical: #e0605f; --neutral-pill: rgba(171,179,159,0.14);
+    --p-blue: #3987e5; --p-orange: #d95926; --p-aqua: #199e70;
+    --shadow: 0 1px 2px rgba(0,0,0,0.3);
+  }
+  :root[data-theme="light"] {
+    color-scheme: light;
+    --page: #ECEEE7; --surface: #F8F9F4; --surface-hover: #F1F3EA;
+    --ink: #1B231B; --ink-secondary: #55604F; --ink-muted: #8B9483; --ink-muted-2: #A8AF9C;
+    --line: #DBDFCF; --line-strong: #C7CDB8;
+    --accent: #A9762F; --accent-ink: #8A5F24; --accent-soft: rgba(169,118,47,0.14);
+    --billable: #1a7a3c; --billable-soft: rgba(26,122,60,0.12);
+    --nonbillable: #6B7566; --nonbillable-soft: rgba(107,117,102,0.12);
+    --good: #0ca30c; --good-soft: rgba(12,163,12,0.12);
+    --warning: #c9860a; --warning-soft: rgba(201,134,10,0.14);
+    --critical: #d03b3b; --neutral-pill: rgba(85,96,79,0.12);
+    --p-blue: #2a78d6; --p-orange: #eb6834; --p-aqua: #1baf7a;
+    --shadow: 0 1px 2px rgba(27,35,27,0.04), 0 1px 1px rgba(27,35,27,0.03);
+  }
+
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--page); color: var(--ink); font-family: var(--font-sans); -webkit-font-smoothing: antialiased; }
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 36px 24px 72px; }
+
+  .masthead { display: flex; justify-content: space-between; align-items: flex-end; gap: 24px; flex-wrap: wrap; padding-bottom: 22px; margin-bottom: 26px; border-bottom: 1px solid var(--line-strong); }
+  .masthead-text .eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; color: var(--accent-ink); }
+  .masthead-text h1 { font-size: 27px; font-weight: 700; letter-spacing: -0.012em; margin: 5px 0 7px; text-wrap: balance; }
+  .masthead-text .subtitle { font-size: 13px; color: var(--ink-secondary); max-width: 56ch; line-height: 1.5; }
+  .period-badge { flex: none; display: flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 600; color: var(--ink); background: var(--surface); border: 1px solid var(--line-strong); border-radius: 999px; padding: 7px 14px 7px 10px; box-shadow: var(--shadow); }
+  .period-badge .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); flex: none; }
+
+  .stat-row { display: grid; grid-template-columns: 1.3fr 1fr 1fr 1fr; gap: 14px; margin-bottom: 20px; }
+  @media (max-width: 860px) { .stat-row { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 480px) { .stat-row { grid-template-columns: 1fr; } }
+  .stat-tile { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 15px 17px; display: flex; flex-direction: column; gap: 9px; box-shadow: var(--shadow); }
+  .stat-tile.hero { background: linear-gradient(155deg, var(--accent-soft), var(--surface) 60%); border-color: var(--line-strong); }
+  .stat-label { font-size: 11px; font-weight: 600; letter-spacing: 0.02em; color: var(--ink-muted); text-transform: uppercase; }
+  .stat-value { font-size: 30px; font-weight: 700; letter-spacing: -0.01em; line-height: 1; }
+  .stat-tile.hero .stat-value { color: var(--accent-ink); font-size: 34px; }
+  .stat-value .unit { font-size: 15px; font-weight: 600; color: var(--ink-secondary); margin-left: 3px; }
+  .stat-meta { font-size: 11.5px; color: var(--ink-secondary); }
+  .meter-track { height: 6px; border-radius: 3px; background: var(--line); overflow: hidden; }
+  .meter-fill { height: 100%; border-radius: 3px; background: var(--accent); }
+
+  .columns { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 20px; align-items: start; margin-bottom: 20px; }
+  @media (max-width: 900px) { .columns { grid-template-columns: 1fr; } }
+
+  .ledger-sheet { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 4px 22px 6px; box-shadow: var(--shadow); }
+  .ledger-sheet.full { padding: 4px 0 6px; overflow: hidden; }
+  .sheet-head { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; padding: 18px 22px 14px; }
+  .ledger-sheet.full .sheet-head { padding: 18px 22px 14px; flex-wrap: wrap; }
+  .sheet-head h2 { font-size: 15px; font-weight: 700; margin: 0; letter-spacing: -0.005em; }
+  .sheet-head .sheet-sub { font-size: 11.5px; color: var(--ink-muted); }
+
+  .section { padding: 18px 22px; border-top: 1px solid var(--line); }
+  .ledger-sheet > .section:first-of-type { border-top: none; padding-top: 0; }
+  .section-title { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; margin-bottom: 13px; }
+  .section-title .label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ink-secondary); }
+
+  .legend { display: flex; gap: 13px; flex-wrap: wrap; font-size: 11px; color: var(--ink-secondary); }
+  .legend-item { display: flex; align-items: center; gap: 5px; white-space: nowrap; }
+  .legend-item .swatch { width: 8px; height: 8px; border-radius: 2px; flex: none; }
+
+  .chart-box { position: relative; }
+  .chart-box svg { display: block; width: 100%; overflow: visible; }
+  .tooltip { position: absolute; pointer-events: none; opacity: 0; z-index: 8; background: var(--ink); color: var(--page); border-radius: 7px; padding: 9px 11px; font-size: 11.5px; line-height: 1.45; min-width: 140px; transform: translate(-50%, calc(-100% - 10px)); transition: opacity .08s ease; box-shadow: 0 4px 14px rgba(0,0,0,0.22); }
+  .tooltip .tt-title { font-weight: 700; margin-bottom: 4px; }
+  .tooltip .tt-row { display: flex; align-items: center; gap: 10px; justify-content: space-between; }
+  .tooltip .tt-row + .tt-row { margin-top: 2px; }
+  .tooltip .tt-key { display: flex; align-items: center; gap: 5px; color: rgba(248,249,244,0.75); }
+  .tooltip .tt-key .stroke { width: 9px; height: 0; border-top: 2px solid; flex: none; }
+  .tooltip .tt-val { font-weight: 700; font-variant-numeric: tabular-nums; }
+  .bar-seg, .pie-slice { transition: filter .1s ease; cursor: default; }
+  .bar-seg:hover, .pie-slice:hover { filter: brightness(1.08); }
+
+  .pies { display: flex; flex-direction: column; gap: 22px; }
+  .pie-row { display: flex; align-items: center; gap: 18px; }
+  .pie-row .pie-svg-box { flex: none; width: 128px; height: 128px; position: relative; }
+  .pie-center { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; pointer-events: none; }
+  .pie-center .pc-val { font-size: 17px; font-weight: 700; }
+  .pie-center .pc-lbl { font-size: 9px; color: var(--ink-muted); text-transform: uppercase; letter-spacing: 0.04em; }
+  .pie-legend { display: flex; flex-direction: column; gap: 7px; font-size: 12px; flex: 1; min-width: 0; }
+  .pie-legend .pl-row { display: flex; align-items: center; gap: 7px; }
+  .pie-legend .swatch { width: 9px; height: 9px; border-radius: 2px; flex: none; }
+  .pie-legend .pl-name { color: var(--ink-secondary); flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .pie-legend .pl-val { font-weight: 600; font-variant-numeric: tabular-nums; color: var(--ink); }
+
+  table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+  thead th { text-align: left; font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; color: var(--ink-muted); padding: 0 8px 8px 0; border-bottom: 1px solid var(--line); }
+  thead th.num, td.num { text-align: right; font-variant-numeric: tabular-nums; }
+  tbody td { padding: 9px 8px 9px 0; border-bottom: 1px solid var(--line); vertical-align: middle; }
+  tbody tr:last-child td { border-bottom: none; }
+  .table-scroll { overflow-x: auto; }
+  .cell-item { color: var(--ink); }
+
+  .pill { display: inline-flex; align-items: center; gap: 4px; font-size: 10.5px; font-weight: 700; padding: 3px 8px; border-radius: 999px; text-transform: uppercase; letter-spacing: 0.02em; white-space: nowrap; }
+  .pill.billable { background: var(--billable-soft); color: var(--billable); }
+  .pill.nonbillable { background: var(--nonbillable-soft); color: var(--nonbillable); }
+  .pill .pilldot { width: 5px; height: 5px; border-radius: 50%; background: currentColor; flex: none; }
+
+  .footer-note { margin-top: 26px; padding-top: 16px; border-top: 1px solid var(--line-strong); font-size: 11.5px; color: var(--ink-muted); line-height: 1.6; display: flex; gap: 8px; }
+  .footer-note .tag { flex: none; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; color: var(--accent-ink); background: var(--accent-soft); padding: 2px 7px; border-radius: 5px; margin-top: 1px; }
+
+  /* ---- Timesheet Detail grid (adapted) ---- */
+  .grid-toolbar { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .view-toggle { display: flex; border: 1px solid var(--line-strong); border-radius: 7px; overflow: hidden; }
+  .vt-btn { padding: 5px 13px; font-size: 12px; font-weight: 600; cursor: pointer; background: var(--surface); border: none; color: var(--ink-secondary); }
+  .vt-btn.active { background: var(--ink); color: var(--page); }
+  .vt-btn:first-child { border-right: 1px solid var(--line-strong); }
+  .nav-group { display: flex; align-items: center; gap: 6px; }
+  .nav-btn { background: var(--page); border: 1px solid var(--line-strong); color: var(--ink-secondary); padding: 5px 10px; border-radius: 6px; cursor: pointer; font-size: 13px; line-height: 1; }
+  .nav-btn:hover { background: var(--surface-hover); }
+  .nav-btn.sm { font-size: 10.5px; padding: 5px 9px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.03em; }
+  .nav-label { font-size: 13px; font-weight: 700; color: var(--ink); min-width: 168px; text-align: center; }
+
+  .grid-summary { display: flex; background: var(--page); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+  .gs-item { display: flex; flex-direction: column; align-items: center; padding: 9px 20px; border-right: 1px solid var(--line); gap: 2px; }
+  .gs-label { color: var(--ink-muted); font-size: 9.5px; text-transform: uppercase; letter-spacing: 0.05em; }
+  .gs-value { font-size: 15px; font-weight: 700; color: var(--ink); font-variant-numeric: tabular-nums; }
+  .gs-value.billable { color: var(--billable); }
+  .gs-value.nonbillable { color: var(--nonbillable); }
+
+  .grid-wrap { overflow-x: auto; padding: 14px 22px 20px; }
+  .grid-wrap table { table-layout: fixed; border-collapse: collapse; }
+  .grid-wrap th { background: var(--page); padding: 7px 4px; font-size: 9.5px; font-weight: 700; color: var(--ink-muted); text-transform: uppercase; letter-spacing: 0.03em; border-bottom: 2px solid var(--line); text-align: center; white-space: nowrap; }
+  .grid-wrap th.th-name { text-align: left; padding-left: 10px; }
+  .grid-wrap th.th-total { text-align: right; padding-right: 8px; }
+  .grid-wrap th.weekend { background: var(--surface-hover); }
+  .grid-wrap .col-name { position: sticky; left: 0; z-index: 5; background: var(--surface); }
+  .grid-wrap th.col-name { background: var(--page); z-index: 6; }
+  .grid-wrap .col-total { position: sticky; right: 0; z-index: 5; background: var(--surface); }
+  .grid-wrap th.col-total-h { background: var(--page); z-index: 6; position: sticky; right: 0; }
+  .grid-wrap td { vertical-align: middle; font-variant-numeric: tabular-nums; }
+  .proj-row td { border-bottom: 1px solid var(--line); border-top: 2px solid var(--line); }
+  .proj-row:first-child td { border-top: none; }
+  .proj-name { padding: 7px 8px 7px 10px; font-weight: 700; font-size: 12px; border-left: 3px solid transparent; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .proj-name.billable { border-left-color: var(--billable); }
+  .proj-name.nonbillable { border-left-color: var(--ink-muted-2); }
+  .proj-row .day-cell, .proj-row .total-cell-td { font-weight: 700; font-size: 12px; }
+  .act-row td { border-bottom: 1px solid var(--line); background: var(--surface-hover); }
+  .act-row:last-of-type td { border-bottom: 1px solid var(--line-strong); }
+  .act-name { padding: 5px 8px 5px 20px; font-size: 11px; color: var(--ink-secondary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .act-row .day-cell { font-size: 11px; color: var(--ink-secondary); }
+  .act-row .total-cell-td { font-size: 11px; color: var(--ink-secondary); font-weight: 600; }
+  .day-cell { text-align: center; padding: 5px 2px; white-space: nowrap; position: relative; }
+  .day-cell.weekend-col { background: rgba(0,0,0,0.02); }
+  .day-cell.zero { color: var(--ink-muted-2); }
+  .day-cell.billable-val { color: var(--billable); }
+  .day-cell.nonbillable-val { color: var(--ink-secondary); }
+  .day-cell.has-note::after { content: ''; position: absolute; top: 3px; right: 4px; width: 0; height: 0; border-left: 5px solid transparent; border-top: 5px solid var(--accent); opacity: 0.7; }
+  .total-cell-td { text-align: right; padding: 5px 8px; font-weight: 700; white-space: nowrap; border-left: 1px solid var(--line); }
+  .total-cell-td.zero { color: var(--ink-muted-2); }
+  .total-cell-td.billable-val { color: var(--billable); }
+  .total-row td { background: var(--page); border-top: 2px solid var(--line-strong); font-weight: 700; text-align: center; font-size: 12px; color: var(--ink); padding: 6px 3px; }
+  .total-row td:first-child { text-align: left; padding-left: 10px; font-size: 10px; text-transform: uppercase; letter-spacing: 0.04em; color: var(--ink-muted); }
+  .total-row td:last-child { text-align: right; padding-right: 8px; font-size: 13px; }
+  .total-row td.weekend-col { background: var(--surface-hover); }
+  .empty-state { text-align: center; padding: 36px 20px; color: var(--ink-muted); }
+  .grid-tip { position: fixed; background: var(--ink); color: var(--page); padding: 7px 11px; border-radius: 7px; font-size: 11px; line-height: 1.6; max-width: 260px; pointer-events: none; z-index: 999; opacity: 0; transition: opacity 0.15s; white-space: pre-wrap; box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
+  .grid-tip.show { opacity: 1; }
+
+  @media (prefers-reduced-motion: reduce) { .bar-seg, .pie-slice, .tooltip { transition: none; } }
+
+  .nav-strip { display: flex; gap: 8px; margin-bottom: 22px; flex-wrap: wrap; }
+  .nav-pill { font-size: 11.5px; font-weight: 600; padding: 6px 13px; border-radius: 999px; border: 1px solid var(--line-strong); background: var(--surface); color: var(--ink-secondary); text-decoration: none; transition: background .1s, color .1s; }
+  .nav-pill:hover { background: var(--surface-hover); }
+  .nav-pill.active { background: var(--ink); color: var(--page); border-color: var(--ink); }
+  .nav-pill.home { color: var(--accent-ink); font-weight: 700; }
+</style>
+<style>
+  .kt-toolbar { display: flex; align-items: center; gap: 8px; }
+  .kt-hint { font-size: 11px; color: var(--ink-muted); margin-left: 8px; }
+
+  .kt-wrap { overflow-x: auto; padding: 14px 22px 20px; }
+  .kt-wrap table { width: 100%; border-collapse: collapse; table-layout: fixed; }
+  .kt-wrap th { background: var(--page); padding: 7px 5px; font-size: 9.5px; font-weight: 700; color: var(--ink-muted); text-transform: uppercase; letter-spacing: 0.03em; border-bottom: 2px solid var(--line); text-align: center; white-space: nowrap; }
+  .kt-wrap th.col-project { text-align: left; padding-left: 10px; }
+  .kt-wrap th.col-task { text-align: left; }
+  .kt-wrap th.col-total { text-align: right; padding-right: 8px; }
+
+  .kt-wrap tbody tr { border-bottom: 1px solid var(--line); }
+  .kt-wrap tbody tr:last-child { border-bottom: none; }
+  .kt-wrap tbody tr:hover { background: var(--surface-hover); }
+  .kt-wrap td { vertical-align: middle; }
+  .project-cell { padding: 8px 8px 8px 10px; font-weight: 700; font-size: 12px; border-left: 3px solid transparent; max-width: 200px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .task-cell { padding: 8px 8px; font-size: 11px; color: var(--ink-muted); max-width: 165px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .day-cell { text-align: center; min-width: 66px; padding: 0; }
+  .total-cell { text-align: right; padding: 8px 10px; font-weight: 700; font-size: 13px; white-space: nowrap; min-width: 66px; border-left: 1px solid var(--line); }
+
+  .row-billable .project-cell { border-left-color: var(--billable); }
+  .row-nonbillable .project-cell { border-left-color: var(--ink-muted-2); }
+
+  .day-inner { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 6px 3px; min-height: 44px; border-radius: 5px; margin: 2px 3px; transition: background 0.12s; position: relative; cursor: default; }
+  .day-inner.clickable { cursor: pointer; }
+  .day-inner.clickable:hover { background: var(--surface-hover); }
+  .day-inner.has-notes.clickable:hover { background: var(--good-soft); }
+
+  .hours-text { font-size: 13px; font-weight: 600; line-height: 1; font-variant-numeric: tabular-nums; }
+  .h-billable { color: var(--billable); }
+  .h-nonbillable { color: var(--ink-secondary); }
+  .h-zero { color: var(--ink-muted-2); font-weight: 400; }
+
+  .kt-tri { position: absolute; top: 4px; right: 5px; width: 0; height: 0; border-left: 5px solid transparent; border-top: 5px solid var(--accent); opacity: 0.7; }
+  .copy-hint { font-size: 9px; color: var(--billable); margin-top: 4px; opacity: 0; transition: opacity 0.12s; }
+  .day-inner.clickable:hover .copy-hint { opacity: 1; }
+
+  tfoot tr { border-top: 2px solid var(--line-strong); }
+  tfoot td { background: var(--page); font-weight: 700; padding: 8px 5px; text-align: center; font-size: 13px; color: var(--ink-secondary); }
+  tfoot td:first-child { text-align: left; padding-left: 10px; font-size: 10px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ink-muted); font-weight: 600; }
+  tfoot td:last-child { text-align: right; padding-right: 10px; color: var(--ink); border-left: 1px solid var(--line); }
+
+  .empty-state { text-align: center; padding: 40px 20px; color: var(--ink-muted); font-size: 14px; }
+
+  .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(8px); background: var(--ink); color: var(--page); padding: 8px 18px; border-radius: 20px; font-size: 12px; font-weight: 600; opacity: 0; transition: opacity 0.22s, transform 0.22s; pointer-events: none; z-index: 1001; white-space: nowrap; }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+</style>
+
+<div class="wrap">
+
+  <div class="nav-strip">
+    <a class="nav-pill home" href="index.html">Ops Ledger</a>
+    <a class="nav-pill" href="time-stats.html">Stats</a>
+    <a class="nav-pill" href="time-detail.html">Detail</a>
+    <a class="nav-pill active" href="time-kantata.html">Kantata</a>
+    <a class="nav-pill" href="tasks.html">Tasks</a>
+  </div>
+
+  <div class="masthead">
+    <div class="masthead-text">
+      <div class="eyebrow">Ops Ledger &middot; Josiah Hobson</div>
+      <h1>Time &mdash; Kantata</h1>
+      <div class="subtitle">Week-by-week crosswalk to Kantata's own project/task rows &mdash; hover a cell to preview notes, click to copy them for pasting into Kantata.</div>
+    </div>
+    <div class="period-badge"><span class="dot"></span>__GENERATED_LABEL__</div>
+  </div>
+
+  <div class="ledger-sheet full">
+    <div class="sheet-head">
+      <div>
+        <h2>Kantata Timesheet</h2>
+        <span class="sheet-sub">one row per Kantata project, this week</span>
+      </div>
+      <div class="kt-toolbar">
+        <div class="nav-group">
+          <button class="nav-btn" onclick="shiftWeek(-1)">&#8592;</button>
+          <span class="nav-label" id="weekLabel"></span>
+          <button class="nav-btn" onclick="shiftWeek(1)">&#8594;</button>
+          <button class="nav-btn sm" onclick="goToToday()">Today</button>
+        </div>
+        <span class="kt-hint">Click a cell to copy&nbsp;&middot;&nbsp;week only, matches Kantata's own entry screen</span>
+      </div>
+    </div>
+    <div class="grid-summary" id="summaryBar"></div>
+    <div class="kt-wrap">
+      <table>
+        <thead id="thead"></thead>
+        <tbody id="tbody"></tbody>
+        <tfoot id="tfoot"></tfoot>
+      </table>
+    </div>
+  </div>
+
+  <div class="footer-note">
+    <span class="tag">Auto</span>
+    <span>Regenerated nightly from <code>time_log.json</code>. See <a href="time-stats.html" style="color:inherit;">Stats</a> for the summary view and <a href="time-detail.html" style="color:inherit;">Time Detail</a> for reviewing trends.</span>
+  </div>
+
+</div>
+
+<div class="grid-tip" id="tip"></div>
+<div class="toast" id="toast"></div>
+
+<script>
+const ALL_ENTRIES = __ALL_ENTRIES__;
+const PROJECT_MAP = __PROJECT_MAP__;
+
+const PROJ = {};
+Object.values(PROJECT_MAP).forEach(p => {
+  if (p.kantata_id && p.kantata_name) {
+    PROJ[p.kantata_id] = { name: p.kantata_name, task: p.kantata_task || 'Time Tracking', billable: p.billable };
+  }
+});
+ALL_ENTRIES.forEach(e => {
+  if (!PROJ[e.kantata_id]) {
+    PROJ[e.kantata_id] = { name: e.client + ' | ' + e.project, task: 'Time Tracking', billable: e.billable };
+  }
+});
+
+function toISO(d) { return d.toISOString().slice(0, 10); }
+function getSunday(d) { const r = new Date(d); r.setHours(0, 0, 0, 0); r.setDate(r.getDate() - r.getDay()); return r; }
+function addDays(d, n) { const r = new Date(d); r.setDate(r.getDate() + n); return r; }
+
+let weekStart = getSunday(new Date());
+
+function fmtH(h) {
+  if (!h || h === 0) return null;
+  const hrs = Math.floor(h), mins = Math.round((h - hrs) * 60);
+  if (hrs === 0) return '0h ' + mins + 'm';
+  if (mins === 0) return hrs + 'h 0m';
+  return hrs + 'h ' + mins + 'm';
+}
+const DSHORT = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+function weekLabel(sun) {
+  const sat = addDays(sun, 6);
+  const mo = sun.toLocaleDateString('en-US', { month: 'short' });
+  const moS = sat.toLocaleDateString('en-US', { month: 'short' });
+  const yr = sat.getFullYear();
+  return (mo === moS ? mo + ' ' + sun.getDate() + '\u2013' + sat.getDate() : mo + ' ' + sun.getDate() + ' \u2013 ' + moS + ' ' + sat.getDate()) + ', ' + yr;
+}
+
+function aggregateWeek(sun) {
+  const dates = Array.from({ length: 7 }, (_, i) => toISO(addDays(sun, i)));
+  const dateSet = new Set(dates);
+  const week = ALL_ENTRIES.filter(e => dateSet.has(e.date));
+
+  const groups = {};
+  week.forEach(e => {
+    groups[e.kantata_id] = groups[e.kantata_id] || {};
+    groups[e.kantata_id][e.date] = groups[e.kantata_id][e.date] || { h: 0, parts: [] };
+    groups[e.kantata_id][e.date].h += e.hours;
+    groups[e.kantata_id][e.date].parts.push(e.notes ? e.activity + ': ' + e.notes : e.activity);
+  });
+
+  const rows = Object.entries(groups).map(([kid, dayMap]) => {
+    const p = PROJ[kid] || { name: kid, task: '\u2014', billable: true };
+    const days = {};
+    dates.forEach(d => { if (dayMap[d]) days[d] = { h: dayMap[d].h, n: dayMap[d].parts.join('\n') }; });
+    return { kid, ...p, days };
+  });
+
+  rows.sort((a, b) => { if (a.billable !== b.billable) return a.billable ? 1 : -1; return a.name.localeCompare(b.name); });
+  return { dates, rows };
+}
+
+const tipEl = document.getElementById('tip');
+let ttTimer, toastTimer;
+function showTip(el, text) {
+  clearTimeout(ttTimer);
+  tipEl.textContent = text;
+  tipEl.classList.add('show');
+  const r = el.getBoundingClientRect(), tw = 280;
+  let left = r.left + r.width / 2 - tw / 2, top = r.top - 128;
+  if (left < 8) left = 8;
+  if (left + tw > window.innerWidth - 8) left = window.innerWidth - tw - 8;
+  if (top < 8) top = r.bottom + 8;
+  tipEl.style.left = left + 'px'; tipEl.style.top = top + 'px';
+}
+function hideTip() { ttTimer = setTimeout(() => tipEl.classList.remove('show'), 100); }
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 2200);
+}
+function copyText(text) {
+  const fb = () => {
+    const ta = document.createElement('textarea');
+    ta.value = text; ta.style.cssText = 'position:fixed;opacity:0';
+    document.body.appendChild(ta); ta.select();
+    try { document.execCommand('copy'); } catch (e) {}
+    document.body.removeChild(ta); showToast('\u2713 Copied to clipboard');
+  };
+  navigator.clipboard ? navigator.clipboard.writeText(text).then(() => showToast('\u2713 Copied to clipboard')).catch(fb) : fb();
+}
+
+function render() {
+  const { dates, rows } = aggregateWeek(weekStart);
+  document.getElementById('weekLabel').textContent = weekLabel(weekStart);
+
+  const thead = document.getElementById('thead'); thead.innerHTML = '';
+  const hr = document.createElement('tr');
+  const headers = [
+    { txt: 'Project', cls: 'col-project' }, { txt: 'Task', cls: 'col-task' },
+    ...dates.map((d, i) => ({ txt: DSHORT[i] + ' ' + addDays(weekStart, i).getDate(), cls: '' })),
+    { txt: 'Total', cls: 'col-total' }
+  ];
+  headers.forEach(h => { const th = document.createElement('th'); th.className = h.cls; th.textContent = h.txt; hr.appendChild(th); });
+  thead.appendChild(hr);
+
+  const tbody = document.getElementById('tbody'); tbody.innerHTML = '';
+  const wrap = document.querySelector('.kt-wrap');
+
+  if (!rows.length) {
+    tbody.innerHTML = '';
+    document.getElementById('tfoot').innerHTML = '';
+    wrap.querySelector('table').style.display = 'none';
+    if (!wrap.querySelector('.empty-state')) {
+      const empty = document.createElement('div'); empty.className = 'empty-state';
+      empty.innerHTML = '<strong>No entries</strong>No time logged for this week.';
+      wrap.appendChild(empty);
+    }
+    document.getElementById('summaryBar').innerHTML = '';
+    return;
+  }
+  const existingEmpty = wrap.querySelector('.empty-state');
+  if (existingEmpty) existingEmpty.remove();
+  wrap.querySelector('table').style.display = '';
+
+  let grandTotal = 0, grandB = 0, grandN = 0;
+  const colTotals = {}; dates.forEach(d => colTotals[d] = 0);
+
+  rows.forEach(row => {
+    const tr = document.createElement('tr');
+    tr.className = row.billable ? 'row-billable' : 'row-nonbillable';
+
+    const tdP = document.createElement('td'); tdP.className = 'project-cell'; tdP.textContent = row.name; tdP.title = row.name;
+    const tdT = document.createElement('td'); tdT.className = 'task-cell'; tdT.textContent = row.task; tdT.title = row.task;
+    tr.appendChild(tdP); tr.appendChild(tdT);
+
+    let rowTotal = 0;
+    dates.forEach(d => {
+      const slot = row.days[d];
+      const h = slot ? slot.h : 0;
+      rowTotal += h; colTotals[d] += h;
+
+      const td = document.createElement('td'); td.className = 'day-cell';
+      const inner = document.createElement('div'); inner.className = 'day-inner';
+      const hrsSpan = document.createElement('span');
+      hrsSpan.className = 'hours-text ' + (h === 0 ? 'h-zero' : (row.billable ? 'h-billable' : 'h-nonbillable'));
+      hrsSpan.textContent = fmtH(h) || '\u2014';
+      inner.appendChild(hrsSpan);
+
+      if (slot) {
+        inner.classList.add('clickable');
+        if (slot.n) { inner.classList.add('has-notes'); const tri = document.createElement('span'); tri.className = 'kt-tri'; inner.appendChild(tri); }
+        const hint = document.createElement('span'); hint.className = 'copy-hint'; hint.textContent = 'copy'; inner.appendChild(hint);
+        const copyPayload = slot.n || row.task;
+        inner.addEventListener('mouseenter', () => showTip(inner, slot.n || row.task));
+        inner.addEventListener('mouseleave', hideTip);
+        inner.addEventListener('click', () => copyText(copyPayload));
+      }
+      td.appendChild(inner);
+      tr.appendChild(td);
+    });
+
+    const tdTot = document.createElement('td'); tdTot.className = 'total-cell';
+    tdTot.style.color = row.billable ? 'var(--billable)' : 'var(--ink)';
+    tdTot.textContent = fmtH(rowTotal) || '\u2014';
+    tr.appendChild(tdTot);
+    tbody.appendChild(tr);
+
+    if (row.billable) grandB += rowTotal; else grandN += rowTotal;
+    grandTotal += rowTotal;
+  });
+
+  const tfoot = document.getElementById('tfoot'); tfoot.innerHTML = '';
+  const fr = document.createElement('tr');
+  const tdLabel = document.createElement('td'); tdLabel.textContent = 'Total'; fr.appendChild(tdLabel);
+  const tdBlank = document.createElement('td'); fr.appendChild(tdBlank);
+  dates.forEach(d => { const td = document.createElement('td'); td.textContent = fmtH(colTotals[d]) || '\u2014'; fr.appendChild(td); });
+  const tdGrand = document.createElement('td'); tdGrand.textContent = fmtH(grandTotal) || '0h 0m'; fr.appendChild(tdGrand);
+  tfoot.appendChild(fr);
+
+  const pct = grandTotal > 0 ? Math.round(grandB / grandTotal * 100) : 0;
+  const items = [
+    { label: 'Total', value: fmtH(grandTotal) || '0h 0m', cls: '' },
+    { label: 'Billable', value: fmtH(grandB) || '0h 0m', cls: 'billable' },
+    { label: 'Non-billable', value: fmtH(grandN) || '0h 0m', cls: 'nonbillable' },
+    { label: '% Billable', value: pct + '%', cls: '' }
+  ];
+  document.getElementById('summaryBar').innerHTML = items.map(it =>
+    `<div class="gs-item"><div class="gs-label">${it.label}</div><div class="gs-value ${it.cls}">${it.value}</div></div>`
+  ).join('');
+}
+
+function shiftWeek(n) { weekStart = addDays(weekStart, n * 7); render(); }
+function goToToday() { weekStart = getSunday(new Date()); render(); }
+
+render();
+</script>

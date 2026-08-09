@@ -1,0 +1,467 @@
+<title>Time Detail</title>
+<style>
+  :root {
+    color-scheme: light;
+    --page: #ECEEE7; --surface: #F8F9F4; --surface-hover: #F1F3EA;
+    --ink: #1B231B; --ink-secondary: #55604F; --ink-muted: #8B9483; --ink-muted-2: #A8AF9C;
+    --line: #DBDFCF; --line-strong: #C7CDB8;
+    --accent: #A9762F; --accent-ink: #8A5F24; --accent-soft: rgba(169,118,47,0.14);
+    --billable: #1a7a3c; --billable-soft: rgba(26,122,60,0.12);
+    --nonbillable: #6B7566; --nonbillable-soft: rgba(107,117,102,0.12);
+    --good: #0ca30c; --good-soft: rgba(12,163,12,0.12);
+    --warning: #c9860a; --warning-soft: rgba(201,134,10,0.14);
+    --critical: #d03b3b; --neutral-pill: rgba(85,96,79,0.12);
+    --p-blue: #2a78d6; --p-orange: #eb6834; --p-aqua: #1baf7a;
+    --shadow: 0 1px 2px rgba(27,35,27,0.04), 0 1px 1px rgba(27,35,27,0.03);
+    --font-sans: -apple-system, "SF Pro Text", system-ui, "Segoe UI", Helvetica, Arial, sans-serif;
+    --font-mono: ui-monospace, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:where(:not([data-theme="light"])) {
+      color-scheme: dark;
+      --page: #12150F; --surface: #181C14; --surface-hover: #1F2418;
+      --ink: #EDEFE6; --ink-secondary: #ABB39F; --ink-muted: #6E7768; --ink-muted-2: #545C4A;
+      --line: #2A2F22; --line-strong: #3A4030;
+      --accent: #D9A24F; --accent-ink: #E9B872; --accent-soft: rgba(217,162,79,0.18);
+      --billable: #3FCB6E; --billable-soft: rgba(63,203,110,0.16);
+      --nonbillable: #8C978A; --nonbillable-soft: rgba(140,151,138,0.16);
+      --good: #2fbf2f; --good-soft: rgba(47,191,47,0.16);
+      --warning: #e0a52e; --warning-soft: rgba(224,165,46,0.16);
+      --critical: #e0605f; --neutral-pill: rgba(171,179,159,0.14);
+      --p-blue: #3987e5; --p-orange: #d95926; --p-aqua: #199e70;
+      --shadow: 0 1px 2px rgba(0,0,0,0.3);
+    }
+  }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --page: #12150F; --surface: #181C14; --surface-hover: #1F2418;
+    --ink: #EDEFE6; --ink-secondary: #ABB39F; --ink-muted: #6E7768; --ink-muted-2: #545C4A;
+    --line: #2A2F22; --line-strong: #3A4030;
+    --accent: #D9A24F; --accent-ink: #E9B872; --accent-soft: rgba(217,162,79,0.18);
+    --billable: #3FCB6E; --billable-soft: rgba(63,203,110,0.16);
+    --nonbillable: #8C978A; --nonbillable-soft: rgba(140,151,138,0.16);
+    --good: #2fbf2f; --good-soft: rgba(47,191,47,0.16);
+    --warning: #e0a52e; --warning-soft: rgba(224,165,46,0.16);
+    --critical: #e0605f; --neutral-pill: rgba(171,179,159,0.14);
+    --p-blue: #3987e5; --p-orange: #d95926; --p-aqua: #199e70;
+    --shadow: 0 1px 2px rgba(0,0,0,0.3);
+  }
+  :root[data-theme="light"] {
+    color-scheme: light;
+    --page: #ECEEE7; --surface: #F8F9F4; --surface-hover: #F1F3EA;
+    --ink: #1B231B; --ink-secondary: #55604F; --ink-muted: #8B9483; --ink-muted-2: #A8AF9C;
+    --line: #DBDFCF; --line-strong: #C7CDB8;
+    --accent: #A9762F; --accent-ink: #8A5F24; --accent-soft: rgba(169,118,47,0.14);
+    --billable: #1a7a3c; --billable-soft: rgba(26,122,60,0.12);
+    --nonbillable: #6B7566; --nonbillable-soft: rgba(107,117,102,0.12);
+    --good: #0ca30c; --good-soft: rgba(12,163,12,0.12);
+    --warning: #c9860a; --warning-soft: rgba(201,134,10,0.14);
+    --critical: #d03b3b; --neutral-pill: rgba(85,96,79,0.12);
+    --p-blue: #2a78d6; --p-orange: #eb6834; --p-aqua: #1baf7a;
+    --shadow: 0 1px 2px rgba(27,35,27,0.04), 0 1px 1px rgba(27,35,27,0.03);
+  }
+
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--page); color: var(--ink); font-family: var(--font-sans); -webkit-font-smoothing: antialiased; }
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 36px 24px 72px; }
+
+  .masthead { display: flex; justify-content: space-between; align-items: flex-end; gap: 24px; flex-wrap: wrap; padding-bottom: 22px; margin-bottom: 26px; border-bottom: 1px solid var(--line-strong); }
+  .masthead-text .eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; color: var(--accent-ink); }
+  .masthead-text h1 { font-size: 27px; font-weight: 700; letter-spacing: -0.012em; margin: 5px 0 7px; text-wrap: balance; }
+  .masthead-text .subtitle { font-size: 13px; color: var(--ink-secondary); max-width: 56ch; line-height: 1.5; }
+  .period-badge { flex: none; display: flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 600; color: var(--ink); background: var(--surface); border: 1px solid var(--line-strong); border-radius: 999px; padding: 7px 14px 7px 10px; box-shadow: var(--shadow); }
+  .period-badge .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); flex: none; }
+
+  .stat-row { display: grid; grid-template-columns: 1.3fr 1fr 1fr 1fr; gap: 14px; margin-bottom: 20px; }
+  @media (max-width: 860px) { .stat-row { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 480px) { .stat-row { grid-template-columns: 1fr; } }
+  .stat-tile { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 15px 17px; display: flex; flex-direction: column; gap: 9px; box-shadow: var(--shadow); }
+  .stat-tile.hero { background: linear-gradient(155deg, var(--accent-soft), var(--surface) 60%); border-color: var(--line-strong); }
+  .stat-label { font-size: 11px; font-weight: 600; letter-spacing: 0.02em; color: var(--ink-muted); text-transform: uppercase; }
+  .stat-value { font-size: 30px; font-weight: 700; letter-spacing: -0.01em; line-height: 1; }
+  .stat-tile.hero .stat-value { color: var(--accent-ink); font-size: 34px; }
+  .stat-value .unit { font-size: 15px; font-weight: 600; color: var(--ink-secondary); margin-left: 3px; }
+  .stat-meta { font-size: 11.5px; color: var(--ink-secondary); }
+  .meter-track { height: 6px; border-radius: 3px; background: var(--line); overflow: hidden; }
+  .meter-fill { height: 100%; border-radius: 3px; background: var(--accent); }
+
+  .columns { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 20px; align-items: start; margin-bottom: 20px; }
+  @media (max-width: 900px) { .columns { grid-template-columns: 1fr; } }
+
+  .ledger-sheet { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 4px 22px 6px; box-shadow: var(--shadow); }
+  .ledger-sheet.full { padding: 4px 0 6px; overflow: hidden; }
+  .sheet-head { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; padding: 18px 22px 14px; }
+  .ledger-sheet.full .sheet-head { padding: 18px 22px 14px; flex-wrap: wrap; }
+  .sheet-head h2 { font-size: 15px; font-weight: 700; margin: 0; letter-spacing: -0.005em; }
+  .sheet-head .sheet-sub { font-size: 11.5px; color: var(--ink-muted); }
+
+  .section { padding: 18px 22px; border-top: 1px solid var(--line); }
+  .ledger-sheet > .section:first-of-type { border-top: none; padding-top: 0; }
+  .section-title { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; margin-bottom: 13px; }
+  .section-title .label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ink-secondary); }
+
+  .legend { display: flex; gap: 13px; flex-wrap: wrap; font-size: 11px; color: var(--ink-secondary); }
+  .legend-item { display: flex; align-items: center; gap: 5px; white-space: nowrap; }
+  .legend-item .swatch { width: 8px; height: 8px; border-radius: 2px; flex: none; }
+
+  .chart-box { position: relative; }
+  .chart-box svg { display: block; width: 100%; overflow: visible; }
+  .tooltip { position: absolute; pointer-events: none; opacity: 0; z-index: 8; background: var(--ink); color: var(--page); border-radius: 7px; padding: 9px 11px; font-size: 11.5px; line-height: 1.45; min-width: 140px; transform: translate(-50%, calc(-100% - 10px)); transition: opacity .08s ease; box-shadow: 0 4px 14px rgba(0,0,0,0.22); }
+  .tooltip .tt-title { font-weight: 700; margin-bottom: 4px; }
+  .tooltip .tt-row { display: flex; align-items: center; gap: 10px; justify-content: space-between; }
+  .tooltip .tt-row + .tt-row { margin-top: 2px; }
+  .tooltip .tt-key { display: flex; align-items: center; gap: 5px; color: rgba(248,249,244,0.75); }
+  .tooltip .tt-key .stroke { width: 9px; height: 0; border-top: 2px solid; flex: none; }
+  .tooltip .tt-val { font-weight: 700; font-variant-numeric: tabular-nums; }
+  .bar-seg, .pie-slice { transition: filter .1s ease; cursor: default; }
+  .bar-seg:hover, .pie-slice:hover { filter: brightness(1.08); }
+
+  .pies { display: flex; flex-direction: column; gap: 22px; }
+  .pie-row { display: flex; align-items: center; gap: 18px; }
+  .pie-row .pie-svg-box { flex: none; width: 128px; height: 128px; position: relative; }
+  .pie-center { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; pointer-events: none; }
+  .pie-center .pc-val { font-size: 17px; font-weight: 700; }
+  .pie-center .pc-lbl { font-size: 9px; color: var(--ink-muted); text-transform: uppercase; letter-spacing: 0.04em; }
+  .pie-legend { display: flex; flex-direction: column; gap: 7px; font-size: 12px; flex: 1; min-width: 0; }
+  .pie-legend .pl-row { display: flex; align-items: center; gap: 7px; }
+  .pie-legend .swatch { width: 9px; height: 9px; border-radius: 2px; flex: none; }
+  .pie-legend .pl-name { color: var(--ink-secondary); flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .pie-legend .pl-val { font-weight: 600; font-variant-numeric: tabular-nums; color: var(--ink); }
+
+  table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+  thead th { text-align: left; font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; color: var(--ink-muted); padding: 0 8px 8px 0; border-bottom: 1px solid var(--line); }
+  thead th.num, td.num { text-align: right; font-variant-numeric: tabular-nums; }
+  tbody td { padding: 9px 8px 9px 0; border-bottom: 1px solid var(--line); vertical-align: middle; }
+  tbody tr:last-child td { border-bottom: none; }
+  .table-scroll { overflow-x: auto; }
+  .cell-item { color: var(--ink); }
+
+  .pill { display: inline-flex; align-items: center; gap: 4px; font-size: 10.5px; font-weight: 700; padding: 3px 8px; border-radius: 999px; text-transform: uppercase; letter-spacing: 0.02em; white-space: nowrap; }
+  .pill.billable { background: var(--billable-soft); color: var(--billable); }
+  .pill.nonbillable { background: var(--nonbillable-soft); color: var(--nonbillable); }
+  .pill .pilldot { width: 5px; height: 5px; border-radius: 50%; background: currentColor; flex: none; }
+
+  .footer-note { margin-top: 26px; padding-top: 16px; border-top: 1px solid var(--line-strong); font-size: 11.5px; color: var(--ink-muted); line-height: 1.6; display: flex; gap: 8px; }
+  .footer-note .tag { flex: none; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; color: var(--accent-ink); background: var(--accent-soft); padding: 2px 7px; border-radius: 5px; margin-top: 1px; }
+
+  /* ---- Timesheet Detail grid (adapted) ---- */
+  .grid-toolbar { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .view-toggle { display: flex; border: 1px solid var(--line-strong); border-radius: 7px; overflow: hidden; }
+  .vt-btn { padding: 5px 13px; font-size: 12px; font-weight: 600; cursor: pointer; background: var(--surface); border: none; color: var(--ink-secondary); }
+  .vt-btn.active { background: var(--ink); color: var(--page); }
+  .vt-btn:first-child { border-right: 1px solid var(--line-strong); }
+  .nav-group { display: flex; align-items: center; gap: 6px; }
+  .nav-btn { background: var(--page); border: 1px solid var(--line-strong); color: var(--ink-secondary); padding: 5px 10px; border-radius: 6px; cursor: pointer; font-size: 13px; line-height: 1; }
+  .nav-btn:hover { background: var(--surface-hover); }
+  .nav-btn.sm { font-size: 10.5px; padding: 5px 9px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.03em; }
+  .nav-label { font-size: 13px; font-weight: 700; color: var(--ink); min-width: 168px; text-align: center; }
+
+  .grid-summary { display: flex; background: var(--page); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+  .gs-item { display: flex; flex-direction: column; align-items: center; padding: 9px 20px; border-right: 1px solid var(--line); gap: 2px; }
+  .gs-label { color: var(--ink-muted); font-size: 9.5px; text-transform: uppercase; letter-spacing: 0.05em; }
+  .gs-value { font-size: 15px; font-weight: 700; color: var(--ink); font-variant-numeric: tabular-nums; }
+  .gs-value.billable { color: var(--billable); }
+  .gs-value.nonbillable { color: var(--nonbillable); }
+
+  .grid-wrap { overflow-x: auto; padding: 14px 22px 20px; }
+  .grid-wrap table { table-layout: fixed; border-collapse: collapse; }
+  .grid-wrap th { background: var(--page); padding: 7px 4px; font-size: 9.5px; font-weight: 700; color: var(--ink-muted); text-transform: uppercase; letter-spacing: 0.03em; border-bottom: 2px solid var(--line); text-align: center; white-space: nowrap; }
+  .grid-wrap th.th-name { text-align: left; padding-left: 10px; }
+  .grid-wrap th.th-total { text-align: right; padding-right: 8px; }
+  .grid-wrap th.weekend { background: var(--surface-hover); }
+  .grid-wrap .col-name { position: sticky; left: 0; z-index: 5; background: var(--surface); }
+  .grid-wrap th.col-name { background: var(--page); z-index: 6; }
+  .grid-wrap .col-total { position: sticky; right: 0; z-index: 5; background: var(--surface); }
+  .grid-wrap th.col-total-h { background: var(--page); z-index: 6; position: sticky; right: 0; }
+  .grid-wrap td { vertical-align: middle; font-variant-numeric: tabular-nums; }
+  .proj-row td { border-bottom: 1px solid var(--line); border-top: 2px solid var(--line); }
+  .proj-row:first-child td { border-top: none; }
+  .proj-name { padding: 7px 8px 7px 10px; font-weight: 700; font-size: 12px; border-left: 3px solid transparent; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .proj-name.billable { border-left-color: var(--billable); }
+  .proj-name.nonbillable { border-left-color: var(--ink-muted-2); }
+  .proj-row .day-cell, .proj-row .total-cell-td { font-weight: 700; font-size: 12px; }
+  .act-row td { border-bottom: 1px solid var(--line); background: var(--surface-hover); }
+  .act-row:last-of-type td { border-bottom: 1px solid var(--line-strong); }
+  .act-name { padding: 5px 8px 5px 20px; font-size: 11px; color: var(--ink-secondary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .act-row .day-cell { font-size: 11px; color: var(--ink-secondary); }
+  .act-row .total-cell-td { font-size: 11px; color: var(--ink-secondary); font-weight: 600; }
+  .day-cell { text-align: center; padding: 5px 2px; white-space: nowrap; position: relative; }
+  .day-cell.weekend-col { background: rgba(0,0,0,0.02); }
+  .day-cell.zero { color: var(--ink-muted-2); }
+  .day-cell.billable-val { color: var(--billable); }
+  .day-cell.nonbillable-val { color: var(--ink-secondary); }
+  .day-cell.has-note::after { content: ''; position: absolute; top: 3px; right: 4px; width: 0; height: 0; border-left: 5px solid transparent; border-top: 5px solid var(--accent); opacity: 0.7; }
+  .total-cell-td { text-align: right; padding: 5px 8px; font-weight: 700; white-space: nowrap; border-left: 1px solid var(--line); }
+  .total-cell-td.zero { color: var(--ink-muted-2); }
+  .total-cell-td.billable-val { color: var(--billable); }
+  .total-row td { background: var(--page); border-top: 2px solid var(--line-strong); font-weight: 700; text-align: center; font-size: 12px; color: var(--ink); padding: 6px 3px; }
+  .total-row td:first-child { text-align: left; padding-left: 10px; font-size: 10px; text-transform: uppercase; letter-spacing: 0.04em; color: var(--ink-muted); }
+  .total-row td:last-child { text-align: right; padding-right: 8px; font-size: 13px; }
+  .total-row td.weekend-col { background: var(--surface-hover); }
+  .empty-state { text-align: center; padding: 36px 20px; color: var(--ink-muted); }
+  .grid-tip { position: fixed; background: var(--ink); color: var(--page); padding: 7px 11px; border-radius: 7px; font-size: 11px; line-height: 1.6; max-width: 260px; pointer-events: none; z-index: 999; opacity: 0; transition: opacity 0.15s; white-space: pre-wrap; box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
+  .grid-tip.show { opacity: 1; }
+
+  @media (prefers-reduced-motion: reduce) { .bar-seg, .pie-slice, .tooltip { transition: none; } }
+
+  .nav-strip { display: flex; gap: 8px; margin-bottom: 22px; flex-wrap: wrap; }
+  .nav-pill { font-size: 11.5px; font-weight: 600; padding: 6px 13px; border-radius: 999px; border: 1px solid var(--line-strong); background: var(--surface); color: var(--ink-secondary); text-decoration: none; transition: background .1s, color .1s; }
+  .nav-pill:hover { background: var(--surface-hover); }
+  .nav-pill.active { background: var(--ink); color: var(--page); border-color: var(--ink); }
+  .nav-pill.home { color: var(--accent-ink); font-weight: 700; }
+</style>
+
+<div class="wrap">
+
+<div class="nav-strip"><a class="nav-pill" href="index.html">Ops Ledger</a><a class="nav-pill" href="time-stats.html">Stats</a><a class="nav-pill active" href="time-detail.html">Detail</a><a class="nav-pill" href="time-kantata.html">Kantata</a><a class="nav-pill" href="tasks.html">Tasks</a></div>
+
+  <div class="masthead">
+    <div class="masthead-text">
+      <div class="eyebrow">Ops Ledger &middot; Josiah Hobson</div>
+      <h1>Time &mdash; Detail</h1>
+      <div class="subtitle">Project &amp; activity, day by day &mdash; the end-of-week sanity check that daily logging looks right, and the place to dig into trends.</div>
+    </div>
+    <div class="period-badge"><span class="dot"></span>__GENERATED_LABEL__</div>
+  </div>
+
+
+  <div class="ledger-sheet full">
+    <div class="sheet-head">
+      <div>
+        <h2>Timesheet Detail</h2>
+        <span class="sheet-sub">project &amp; activity, day by day</span>
+      </div>
+      <div class="grid-toolbar">
+        <div class="view-toggle">
+          <button class="vt-btn active" id="btnWeek" onclick="setView('week')">Week</button>
+          <button class="vt-btn" id="btnMonth" onclick="setView('month')">Month</button>
+        </div>
+        <div class="nav-group">
+          <button class="nav-btn" onclick="navBack()">&#8592;</button>
+          <span class="nav-label" id="navLabel"></span>
+          <button class="nav-btn" onclick="navFwd()">&#8594;</button>
+          <button class="nav-btn sm" onclick="navNow()">Today</button>
+        </div>
+      </div>
+    </div>
+    <div class="grid-summary" id="summaryBar"></div>
+    <div class="grid-wrap" id="tableWrap"></div>
+  </div>
+
+  <div class="footer-note">
+    <span class="tag">Auto</span>
+    <span>Regenerated nightly from <code>time_log.json</code>. See <a href="time-stats.html" style="color:inherit;">Stats</a> for the summary view and <a href="time-kantata.html" style="color:inherit;">Kantata Timesheet</a> for logging time.</span>
+  </div>
+
+</div>
+
+<div class="grid-tip" id="tip"></div>
+
+<script>
+// ===================== Timesheet Detail grid (adapted from timesheet-detail artifact) =====================
+const ALL_ENTRIES = __ALL_ENTRIES__;
+const PROJECT_MAP = __PROJECT_MAP__;
+
+const PROJ = {}; Object.values(PROJECT_MAP).forEach(p => {
+  if (p.kantata_id) PROJ[p.kantata_id] = { name: p.kantata_name || (p.client + ' | ' + p.project), billable: p.billable };
+});
+ALL_ENTRIES.forEach(e => {
+  if (!PROJ[e.kantata_id]) PROJ[e.kantata_id] = { name: e.client + ' | ' + e.project, billable: e.billable };
+});
+
+let VIEW = 'week';
+function toISO(d) { return d.toISOString().slice(0, 10); }
+function getSunday(d) { const r = new Date(d); r.setHours(0, 0, 0, 0); r.setDate(r.getDate() - r.getDay()); return r; }
+function addDays(d, n) { const r = new Date(d); r.setDate(r.getDate() + n); return r; }
+function pad2(n) { return String(n).padStart(2, '0'); }
+
+const _now = new Date();
+let weekStart = getSunday(_now);
+let monthState = { year: _now.getFullYear(), month: _now.getMonth() };
+
+function setView(v) {
+  VIEW = v;
+  document.getElementById('btnWeek').className = 'vt-btn' + (v === 'week' ? ' active' : '');
+  document.getElementById('btnMonth').className = 'vt-btn' + (v === 'month' ? ' active' : '');
+  render();
+}
+function navBack() { if (VIEW === 'week') weekStart = addDays(weekStart, -7); else shiftMonth(-1); render(); }
+function navFwd() { if (VIEW === 'week') weekStart = addDays(weekStart, 7); else shiftMonth(1); render(); }
+function navNow() { weekStart = getSunday(new Date()); const n = new Date(); monthState = { year: n.getFullYear(), month: n.getMonth() }; render(); }
+function shiftMonth(d) { let m = monthState.month + d, y = monthState.year; if (m > 11) { m -= 12; y++; } else if (m < 0) { m += 12; y--; } monthState = { year: y, month: m }; }
+
+function fmtH(h, compact) {
+  if (!h || h === 0) return null;
+  const hrs = Math.floor(h), mins = Math.round((h - hrs) * 60);
+  if (compact) { if (hrs === 0) return '0:' + pad2(mins); if (mins === 0) return hrs + 'h'; return hrs + ':' + pad2(mins); }
+  if (hrs === 0) return '0h ' + mins + 'm'; if (mins === 0) return hrs + 'h'; return hrs + 'h ' + mins + 'm';
+}
+const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+const DSHORT = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+
+function buildGroups(dates) {
+  const set = new Set(dates), g = {};
+  ALL_ENTRIES.filter(e => set.has(e.date)).forEach(e => {
+    g[e.kantata_id] = g[e.kantata_id] || {};
+    g[e.kantata_id][e.activity] = g[e.kantata_id][e.activity] || {};
+    const slot = g[e.kantata_id][e.activity][e.date] = g[e.kantata_id][e.activity][e.date] || { h: 0, notes: [] };
+    slot.h += e.hours;
+    if (e.notes) slot.notes.push(e.notes);
+  });
+  return g;
+}
+function buildRows(groups) {
+  return Object.entries(groups).map(([kid, acts]) => ({ kid, ...(PROJ[kid] || { name: kid, billable: true }), activities: acts }))
+    .sort((a, b) => { if (a.billable !== b.billable) return a.billable ? 1 : -1; return a.name.localeCompare(b.name); });
+}
+function isWeekend(ds) { const d = new Date(ds + 'T12:00:00'), w = d.getDay(); return w === 0 || w === 6; }
+
+const tipEl = document.getElementById('tip');
+let tipTimer;
+function showTip(el, text) {
+  clearTimeout(tipTimer);
+  tipEl.textContent = text;
+  tipEl.classList.add('show');
+  const r = el.getBoundingClientRect(), tw = 260;
+  let left = r.left + r.width / 2 - tw / 2, top = r.top - 115;
+  if (left < 8) left = 8;
+  if (left + tw > window.innerWidth - 8) left = window.innerWidth - tw - 8;
+  if (top < 8) top = r.bottom + 6;
+  tipEl.style.left = left + 'px'; tipEl.style.top = top + 'px';
+}
+function hideTip() { tipTimer = setTimeout(() => tipEl.classList.remove('show'), 100); }
+
+function makeCell(slot, billable, compact, weekend) {
+  const td = document.createElement('td');
+  const h = slot ? slot.h : 0;
+  const notes = slot && slot.notes && slot.notes.length ? slot.notes.join('\n') : null;
+  td.className = 'day-cell'
+    + (weekend ? ' weekend-col' : '')
+    + (h ? (billable ? ' billable-val' : ' nonbillable-val') : ' zero')
+    + (notes ? ' has-note' : '');
+  td.textContent = fmtH(h, compact) || '\u2014';
+  if (notes) {
+    td.addEventListener('mouseenter', () => showTip(td, notes));
+    td.addEventListener('mouseleave', hideTip);
+  }
+  return td;
+}
+function makeTotalCell(h, billable) {
+  const td = document.createElement('td');
+  td.className = 'total-cell-td col-total' + (h ? (billable ? ' billable-val' : '') : ' zero');
+  td.textContent = fmtH(h) || '\u2014';
+  return td;
+}
+
+function render() {
+  const isWeek = VIEW === 'week';
+  const dates = isWeek
+    ? Array.from({ length: 7 }, (_, i) => toISO(addDays(weekStart, i)))
+    : (() => { const n = new Date(monthState.year, monthState.month + 1, 0).getDate();
+               return Array.from({ length: n }, (_, i) => toISO(new Date(monthState.year, monthState.month, i + 1))); })();
+  const compact = !isWeek;
+
+  if (isWeek) {
+    const sat = addDays(weekStart, 6), mo = weekStart.toLocaleDateString('en-US', { month: 'short' }), moS = sat.toLocaleDateString('en-US', { month: 'short' });
+    document.getElementById('navLabel').textContent = (mo === moS ? mo + ' ' + weekStart.getDate() + '\u2013' + sat.getDate() : mo + ' ' + weekStart.getDate() + ' \u2013 ' + moS + ' ' + sat.getDate()) + ', ' + sat.getFullYear();
+  } else {
+    document.getElementById('navLabel').textContent = MONTHS[monthState.month] + ' ' + monthState.year;
+  }
+
+  const groups = buildGroups(dates), rows = buildRows(groups);
+  const nameW = 190, dayW = isWeek ? 58 : 34, totalW = 64;
+  const wrap = document.getElementById('tableWrap'); wrap.innerHTML = '';
+
+  if (!rows.length) {
+    wrap.innerHTML = '<div class="empty-state"><strong>No entries</strong>No time logged for this period.</div>';
+    document.getElementById('summaryBar').innerHTML = ''; return;
+  }
+
+  const table = document.createElement('table');
+  table.style.width = Math.max(nameW + dates.length * dayW + totalW, 600) + 'px';
+
+  const cg = document.createElement('colgroup');
+  [{ w: nameW }, ...dates.map(() => ({ w: dayW })), { w: totalW }].forEach(({ w }) => {
+    const c = document.createElement('col'); c.style.width = w + 'px'; cg.appendChild(c);
+  });
+  table.appendChild(cg);
+
+  const thead = document.createElement('thead'), hr = document.createElement('tr');
+  const thN = document.createElement('th'); thN.className = 'th-name col-name'; thN.textContent = 'Project / Activity'; hr.appendChild(thN);
+  dates.forEach(d => {
+    const dt = new Date(d + 'T12:00:00'), dow = dt.getDay(), we = dow === 0 || dow === 6;
+    const th = document.createElement('th'); th.className = we ? 'weekend' : '';
+    th.textContent = isWeek ? DSHORT[dow] + ' ' + dt.getDate() : dt.getDate();
+    hr.appendChild(th);
+  });
+  const thT = document.createElement('th'); thT.className = 'th-total col-total-h'; thT.textContent = 'Total'; hr.appendChild(thT);
+  thead.appendChild(hr); table.appendChild(thead);
+
+  const tbody = document.createElement('tbody');
+  let grandTotal = 0, grandB = 0, grandN = 0;
+  const colTotals = {}; dates.forEach(d => colTotals[d] = 0);
+
+  rows.forEach(row => {
+    const projDayH = {}; dates.forEach(d => projDayH[d] = 0);
+    let projTotal = 0;
+    Object.values(row.activities).forEach(dayMap => {
+      dates.forEach(d => { const h = (dayMap[d] || { h: 0 }).h; projDayH[d] += h; projTotal += h; });
+    });
+    dates.forEach(d => { colTotals[d] += projDayH[d]; });
+    if (row.billable) grandB += projTotal; else grandN += projTotal;
+    grandTotal += projTotal;
+
+    const pRow = document.createElement('tr'); pRow.className = 'proj-row';
+    const tdPN = document.createElement('td'); tdPN.className = 'proj-name col-name ' + (row.billable ? 'billable' : 'nonbillable');
+    tdPN.textContent = row.name; tdPN.title = row.name; pRow.appendChild(tdPN);
+    dates.forEach(d => {
+      const h = projDayH[d], we = isWeekend(d);
+      const td = document.createElement('td');
+      td.className = 'day-cell' + (we ? ' weekend-col' : '') + (h ? (row.billable ? ' billable-val' : ' nonbillable-val') : ' zero');
+      td.textContent = fmtH(h, compact) || '\u2014';
+      td.style.fontWeight = '700';
+      pRow.appendChild(td);
+    });
+    pRow.appendChild(makeTotalCell(projTotal, row.billable));
+    tbody.appendChild(pRow);
+
+    Object.entries(row.activities).forEach(([act, dayMap]) => {
+      const aRow = document.createElement('tr'); aRow.className = 'act-row';
+      const tdAN = document.createElement('td'); tdAN.className = 'act-name col-name'; tdAN.textContent = act; aRow.appendChild(tdAN);
+      let actTotal = 0;
+      dates.forEach(d => {
+        const slot = dayMap[d]; actTotal += slot ? slot.h : 0;
+        aRow.appendChild(makeCell(slot, row.billable, compact, isWeekend(d)));
+      });
+      aRow.appendChild(makeTotalCell(actTotal, row.billable));
+      tbody.appendChild(aRow);
+    });
+  });
+  table.appendChild(tbody);
+
+  const tRow = document.createElement('tr'); tRow.className = 'total-row';
+  const tdTN = document.createElement('td'); tdTN.textContent = 'Total'; tRow.appendChild(tdTN);
+  dates.forEach(d => {
+    const td = document.createElement('td'); td.className = isWeekend(d) ? 'weekend-col' : '';
+    td.textContent = fmtH(colTotals[d], compact) || '\u2014';
+    tRow.appendChild(td);
+  });
+  const tdFT = document.createElement('td'); tdFT.className = 'col-total'; tdFT.textContent = fmtH(grandTotal) || '0h'; tdFT.style.fontSize = '13px'; tRow.appendChild(tdFT);
+  table.appendChild(tRow);
+
+  wrap.appendChild(table);
+
+  const pct = grandTotal > 0 ? Math.round(grandB / grandTotal * 100) : 0;
+  const items = [
+    { label: 'Total', value: fmtH(grandTotal) || '0h 0m', cls: '' },
+    { label: 'Billable', value: fmtH(grandB) || '0h 0m', cls: 'billable' },
+    { label: 'Non-billable', value: fmtH(grandN) || '0h 0m', cls: 'nonbillable' },
+    { label: '% Billable', value: pct + '%', cls: '' }
+  ];
+  document.getElementById('summaryBar').innerHTML = items.map(it =>
+    `<div class="gs-item"><div class="gs-label">${it.label}</div><div class="gs-value ${it.cls}">${it.value}</div></div>`
+  ).join('');
+}
+
+render();
+</script>

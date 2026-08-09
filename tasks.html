@@ -1,0 +1,443 @@
+<title>Tasks</title>
+<style>
+  :root {
+    color-scheme: light;
+    --page: #ECEEE7; --surface: #F8F9F4; --surface-hover: #F1F3EA;
+    --ink: #1B231B; --ink-secondary: #55604F; --ink-muted: #8B9483; --ink-muted-2: #A8AF9C;
+    --line: #DBDFCF; --line-strong: #C7CDB8;
+    --accent: #A9762F; --accent-ink: #8A5F24; --accent-soft: rgba(169,118,47,0.14);
+    --good: #0ca30c; --good-soft: rgba(12,163,12,0.12);
+    --warning: #c9860a; --warning-soft: rgba(201,134,10,0.14);
+    --critical: #d03b3b; --critical-soft: rgba(208,59,59,0.12);
+    --neutral-pill: rgba(85,96,79,0.12);
+    --shadow: 0 1px 2px rgba(27,35,27,0.04), 0 1px 1px rgba(27,35,27,0.03);
+    --font-sans: -apple-system, "SF Pro Text", system-ui, "Segoe UI", Helvetica, Arial, sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:where(:not([data-theme="light"])) {
+      color-scheme: dark;
+      --page: #12150F; --surface: #181C14; --surface-hover: #1F2418;
+      --ink: #EDEFE6; --ink-secondary: #ABB39F; --ink-muted: #6E7768; --ink-muted-2: #545C4A;
+      --line: #2A2F22; --line-strong: #3A4030;
+      --accent: #D9A24F; --accent-ink: #E9B872; --accent-soft: rgba(217,162,79,0.18);
+      --good: #2fbf2f; --good-soft: rgba(47,191,47,0.16);
+      --warning: #e0a52e; --warning-soft: rgba(224,165,46,0.16);
+      --critical: #e0605f; --critical-soft: rgba(224,96,95,0.14);
+      --neutral-pill: rgba(171,179,159,0.14);
+      --shadow: 0 1px 2px rgba(0,0,0,0.3);
+    }
+  }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --page: #12150F; --surface: #181C14; --surface-hover: #1F2418;
+    --ink: #EDEFE6; --ink-secondary: #ABB39F; --ink-muted: #6E7768; --ink-muted-2: #545C4A;
+    --line: #2A2F22; --line-strong: #3A4030;
+    --accent: #D9A24F; --accent-ink: #E9B872; --accent-soft: rgba(217,162,79,0.18);
+    --good: #2fbf2f; --good-soft: rgba(47,191,47,0.16);
+    --warning: #e0a52e; --warning-soft: rgba(224,165,46,0.16);
+    --critical: #e0605f; --critical-soft: rgba(224,96,95,0.14);
+    --neutral-pill: rgba(171,179,159,0.14);
+    --shadow: 0 1px 2px rgba(0,0,0,0.3);
+  }
+  :root[data-theme="light"] {
+    color-scheme: light;
+    --page: #ECEEE7; --surface: #F8F9F4; --surface-hover: #F1F3EA;
+    --ink: #1B231B; --ink-secondary: #55604F; --ink-muted: #8B9483; --ink-muted-2: #A8AF9C;
+    --line: #DBDFCF; --line-strong: #C7CDB8;
+    --accent: #A9762F; --accent-ink: #8A5F24; --accent-soft: rgba(169,118,47,0.14);
+    --good: #0ca30c; --good-soft: rgba(12,163,12,0.12);
+    --warning: #c9860a; --warning-soft: rgba(201,134,10,0.14);
+    --critical: #d03b3b; --critical-soft: rgba(208,59,59,0.12);
+    --neutral-pill: rgba(85,96,79,0.12);
+    --shadow: 0 1px 2px rgba(27,35,27,0.04), 0 1px 1px rgba(27,35,27,0.03);
+  }
+
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--page); color: var(--ink); font-family: var(--font-sans); -webkit-font-smoothing: antialiased; }
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 36px 24px 72px; }
+
+  .masthead { display: flex; justify-content: space-between; align-items: flex-end; gap: 24px; flex-wrap: wrap; padding-bottom: 22px; margin-bottom: 26px; border-bottom: 1px solid var(--line-strong); }
+  .masthead-text .eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; color: var(--accent-ink); }
+  .masthead-text h1 { font-size: 27px; font-weight: 700; letter-spacing: -0.012em; margin: 5px 0 7px; text-wrap: balance; }
+  .masthead-text .subtitle { font-size: 13px; color: var(--ink-secondary); max-width: 56ch; line-height: 1.5; }
+  .period-badge { flex: none; display: flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 600; color: var(--ink); background: var(--surface); border: 1px solid var(--line-strong); border-radius: 999px; padding: 7px 14px 7px 10px; box-shadow: var(--shadow); }
+  .period-badge .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); flex: none; }
+
+  .hero-banner { display: grid; grid-template-columns: auto 1fr; gap: 30px; align-items: center; background: linear-gradient(155deg, var(--accent-soft), var(--surface) 65%); border: 1px solid var(--line-strong); border-radius: 14px; padding: 24px 28px; margin-bottom: 20px; box-shadow: var(--shadow); }
+  @media (max-width: 720px) { .hero-banner { grid-template-columns: 1fr; } }
+  .hero-num { display: flex; flex-direction: column; gap: 4px; }
+  .hero-num .hn-label { font-size: 11.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--accent-ink); }
+  .hero-num .hn-value { font-size: 62px; font-weight: 700; line-height: 1; letter-spacing: -0.02em; color: var(--ink); }
+  .hero-num .hn-value .u { font-size: 26px; color: var(--ink-secondary); font-weight: 600; margin-left: 2px; }
+  .hero-num .hn-meta { font-size: 12.5px; color: var(--ink-secondary); }
+  .hero-support { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; border-left: 1px solid var(--line-strong); padding-left: 26px; }
+  @media (max-width: 720px) { .hero-support { border-left: none; padding-left: 0; border-top: 1px solid var(--line-strong); padding-top: 16px; } }
+  .hs-item .hs-label { font-size: 10.5px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.03em; color: var(--ink-muted); margin-bottom: 5px; }
+  .hs-item .hs-value { font-size: 19px; font-weight: 700; }
+  .hs-item .hs-sub { font-size: 11.5px; color: var(--ink-secondary); margin-top: 2px; }
+
+  .columns { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; align-items: start; margin-bottom: 20px; }
+  @media (max-width: 900px) { .columns { grid-template-columns: 1fr; } }
+
+  .ledger-sheet { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 4px 22px 6px; box-shadow: var(--shadow); }
+  .sheet-head { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; padding: 18px 0 14px; }
+  .sheet-head h2 { font-size: 15px; font-weight: 700; margin: 0; letter-spacing: -0.005em; }
+  .sheet-head .sheet-sub { font-size: 11.5px; color: var(--ink-muted); }
+
+  .section { padding: 18px 0; border-top: 1px solid var(--line); }
+  .ledger-sheet > .section:first-of-type { border-top: none; padding-top: 0; }
+  .section-title { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; margin-bottom: 13px; }
+  .section-title .label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ink-secondary); }
+
+  .legend { display: flex; gap: 13px; flex-wrap: wrap; font-size: 11px; color: var(--ink-secondary); }
+  .legend-item { display: flex; align-items: center; gap: 5px; white-space: nowrap; }
+  .legend-item .swatch { width: 8px; height: 8px; border-radius: 2px; flex: none; }
+
+  .chart-box { position: relative; }
+  .chart-box svg { display: block; width: 100%; overflow: visible; }
+  .tooltip { position: absolute; pointer-events: none; opacity: 0; z-index: 8; background: var(--ink); color: var(--page); border-radius: 7px; padding: 9px 11px; font-size: 11.5px; line-height: 1.45; min-width: 150px; transform: translate(-50%, calc(-100% - 10px)); transition: opacity .08s ease; box-shadow: 0 4px 14px rgba(0,0,0,0.22); }
+  .tooltip .tt-title { font-weight: 700; margin-bottom: 4px; }
+  .tooltip .tt-row { display: flex; align-items: center; gap: 10px; justify-content: space-between; }
+  .tooltip .tt-row + .tt-row { margin-top: 2px; }
+  .tooltip .tt-key { display: flex; align-items: center; gap: 5px; color: rgba(248,249,244,0.75); }
+  .tooltip .tt-key .stroke { width: 9px; height: 0; border-top: 2px solid; flex: none; }
+  .tooltip .tt-val { font-weight: 700; font-variant-numeric: tabular-nums; }
+  .bar-seg { transition: filter .1s ease; cursor: default; }
+  .bar-seg:hover { filter: brightness(1.08); }
+
+  .status-mini { display: flex; height: 10px; border-radius: 3px; overflow: hidden; gap: 2px; }
+  .status-mini span { display: block; height: 100%; }
+
+  table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+  thead th { text-align: left; font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; color: var(--ink-muted); padding: 0 8px 8px 0; border-bottom: 1px solid var(--line); }
+  thead th.num, td.num { text-align: right; font-variant-numeric: tabular-nums; }
+  tbody td { padding: 9px 8px 9px 0; border-bottom: 1px solid var(--line); vertical-align: middle; }
+  tbody tr:last-child td { border-bottom: none; }
+  .table-scroll { overflow-x: auto; }
+  .cell-item { color: var(--ink); }
+  .cell-item .sub { color: var(--ink-muted); font-size: 11px; display: block; margin-top: 1px; }
+
+  .pill { display: inline-flex; align-items: center; gap: 4px; font-size: 10.5px; font-weight: 700; padding: 3px 8px; border-radius: 999px; text-transform: uppercase; letter-spacing: 0.02em; white-space: nowrap; }
+  .pill.good { background: var(--good-soft); color: var(--good); }
+  .pill.warning { background: var(--warning-soft); color: var(--warning); }
+  .pill.neutral { background: var(--neutral-pill); color: var(--ink-secondary); }
+  .pill .pilldot { width: 5px; height: 5px; border-radius: 50%; background: currentColor; flex: none; }
+
+  .delta { font-variant-numeric: tabular-nums; font-weight: 700; }
+  .delta.over { color: var(--critical); }
+  .delta.under { color: var(--ink-secondary); }
+
+  .span-pill { display: inline-flex; align-items: center; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 6px; background: var(--surface-hover); border: 1px solid var(--line-strong); color: var(--ink-secondary); font-variant-numeric: tabular-nums; }
+
+  .callout { display: flex; gap: 12px; background: var(--warning-soft); border: 1px solid rgba(201,134,10,0.35); border-radius: 10px; padding: 14px 16px; margin-bottom: 16px; }
+  .callout .co-icon { flex: none; font-size: 15px; line-height: 1.5; color: var(--warning); }
+  .callout .co-body { font-size: 12.5px; line-height: 1.55; color: var(--ink); }
+  .callout .co-body strong { font-weight: 700; }
+  .callout .co-body .co-title { font-weight: 700; text-transform: uppercase; font-size: 10.5px; letter-spacing: 0.04em; color: var(--warning); display: block; margin-bottom: 4px; }
+
+  .full { grid-column: 1 / -1; }
+
+  .footer-note { margin-top: 6px; padding-top: 16px; border-top: 1px solid var(--line-strong); font-size: 11.5px; color: var(--ink-muted); line-height: 1.6; display: flex; gap: 8px; }
+  .footer-note .tag { flex: none; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; color: var(--accent-ink); background: var(--accent-soft); padding: 2px 7px; border-radius: 5px; margin-top: 1px; }
+
+  @media (prefers-reduced-motion: reduce) { .bar-seg, .tooltip { transition: none; } }
+
+  .nav-strip { display: flex; gap: 8px; margin-bottom: 22px; flex-wrap: wrap; }
+  .nav-pill { font-size: 11.5px; font-weight: 600; padding: 6px 13px; border-radius: 999px; border: 1px solid var(--line-strong); background: var(--surface); color: var(--ink-secondary); text-decoration: none; transition: background .1s, color .1s; }
+  .nav-pill:hover { background: var(--surface-hover); }
+  .nav-pill.active { background: var(--ink); color: var(--page); border-color: var(--ink); }
+  .nav-pill.home { color: var(--accent-ink); font-weight: 700; }
+</style>
+
+<div class="wrap">
+
+  <div class="nav-strip">
+    <a class="nav-pill home" href="index.html">Ops Ledger</a>
+    <a class="nav-pill" href="time-stats.html">Stats</a>
+    <a class="nav-pill" href="time-detail.html">Detail</a>
+    <a class="nav-pill" href="time-kantata.html">Kantata</a>
+    <a class="nav-pill active" href="tasks.html">Tasks</a>
+  </div>
+
+  <div class="masthead">
+    <div class="masthead-text">
+      <div class="eyebrow">Ops Ledger &middot; Josiah Hobson</div>
+      <h1>Tasks</h1>
+      <div class="subtitle">How well today-list items get estimated and finished, reconciled each evening. Initiatives (grouping related tasks) are coming &mdash; this page will grow.</div>
+    </div>
+    <div class="period-badge"><span class="dot"></span>Synced Aug 9, 2026 &middot; 3:00pm</div>
+  </div>
+
+  <div class="hero-banner">
+    <div class="hero-num">
+      <div class="hn-label">Estimate accuracy</div>
+      <div class="hn-value">52<span class="u">%</span></div>
+      <div class="hn-meta">32 of 61 logged items landed within &plusmn;15&nbsp;min of estimate</div>
+    </div>
+    <div class="hero-support">
+      <div class="hs-item">
+        <div class="hs-label">Outcomes</div>
+        <div class="hs-value" style="font-size:15px; display:flex; gap:8px;"><span style="color:var(--good)">22 done</span><span style="color:var(--warning)">37 carried</span></div>
+        <div class="status-mini" style="margin-top:7px;">
+          <span style="width:36.1%; background:var(--good)"></span>
+          <span style="width:60.7%; background:var(--warning)"></span>
+          <span style="width:3.3%; background:var(--ink-muted-2)"></span>
+        </div>
+      </div>
+      <div class="hs-item">
+        <div class="hs-label">When missed</div>
+        <div class="hs-value">26<span style="font-size:12px; color:var(--ink-secondary); font-weight:600;"> under</span> / 3<span style="font-size:12px; color:var(--ink-secondary); font-weight:600;"> over</span></div>
+        <div class="hs-sub">most misses are stalls, not bad time-boxing</div>
+      </div>
+      <div class="hs-item">
+        <div class="hs-label">Hours</div>
+        <div class="hs-value">22<span style="font-size:12px; color:var(--ink-secondary); font-weight:600;"> of 44.75 est</span></div>
+        <div class="hs-sub">avg miss 0.9h when off</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="columns">
+    <div class="ledger-sheet">
+      <div class="sheet-head"><h2>Estimated vs. actual</h2><span class="sheet-sub">daily</span></div>
+      <div class="section">
+        <div class="legend">
+          <span class="legend-item"><span class="swatch" style="background:var(--ink-muted-2)"></span>Estimated</span>
+          <span class="legend-item"><span class="swatch" style="background:var(--accent)"></span>Actual</span>
+        </div>
+        <div class="chart-box" id="chart-est" style="height:210px; margin-top:14px;">
+          <div class="tooltip" id="tt-est"></div>
+        </div>
+      </div>
+      <div class="section">
+        <div class="section-title"><span class="label">Outcomes &mdash; all 61 items</span></div>
+        <div class="legend">
+          <span class="legend-item"><span class="swatch" style="background:var(--good)"></span>Done &middot; 22</span>
+          <span class="legend-item"><span class="swatch" style="background:var(--warning)"></span>Carried &middot; 37</span>
+          <span class="legend-item"><span class="swatch" style="background:var(--ink-muted-2)"></span>Dropped &middot; 2</span>
+        </div>
+        <div class="status-mini" style="margin-top:10px; height:12px;">
+          <span style="width:36.1%; background:var(--good)"></span>
+          <span style="width:60.7%; background:var(--warning)"></span>
+          <span style="width:3.3%; background:var(--ink-muted-2)"></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="ledger-sheet">
+      <div class="sheet-head"><h2>Biggest misses</h2><span class="sheet-sub">largest |estimate &minus; actual|</span></div>
+      <div class="section">
+        <div class="table-scroll">
+          <table>
+            <thead><tr><th>Item</th><th class="num">Est</th><th class="num">Act</th><th class="num">&Delta;</th><th></th></tr></thead>
+            <tbody id="tbl-variance"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ledger-sheet full" style="margin-bottom:20px;">
+    <div class="sheet-head"><h2>Task threads</h2><span class="sheet-sub">items re-estimated across &gt;1 day</span></div>
+    <div class="section">
+      <div class="callout">
+        <span class="co-icon">&#9888;</span>
+        <div class="co-body">
+          <span class="co-title">Data gap</span>
+          There's no stable task ID in <code>estimate_log.json</code> &mdash; the 16 threads below are grouped by <strong>exact match on the <code>item</code> text</strong>. Reworded carries slip through: <em>&ldquo;Compile NSM tech docs &mdash; review draft, send to Beef/Gary/James/Thomas&rdquo;</em> (Jul&nbsp;22&ndash;23) and <em>&ldquo;NSM: Compile tech docs &mdash; review draft, send to Beef/Gary/James/Thomas&rdquo;</em> (Jul&nbsp;24&ndash;27) are almost certainly the same task, split into two threads because the client prefix changed. <strong>Fix:</strong> have the eod-review flow carry a stable <code>thread_id</code> forward when a <code>#next</code>/<code>#now</code> item repeats, instead of re-deriving identity from text.
+        </div>
+      </div>
+      <div class="table-scroll">
+        <table>
+          <thead><tr><th>Item</th><th>Span</th><th class="num">Est total</th><th class="num">Act total</th><th></th></tr></thead>
+          <tbody id="tbl-threads"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer-note">
+    <span class="tag">Auto</span>
+    <span>Regenerated nightly from <code>estimate_log.json</code>. Separate from <a href="time-stats.html" style="color:inherit;">Time</a> on purpose: this page is about how well work gets sized and finished, not where hours go.</span>
+  </div>
+
+</div>
+
+<script>
+(function () {
+  var root = document.documentElement;
+  function cssVar(name) { return getComputedStyle(root).getPropertyValue(name).trim(); }
+
+  var ESTVACT = [{"label": "Jul 27", "full": "Jul 27", "est": 8.0, "act": 2.5, "n": 10}, {"label": "Jul 28", "full": "Jul 28", "est": 3.25, "act": 1.75, "n": 4}, {"label": "Jul 29", "full": "Jul 29", "est": 1.75, "act": 1.75, "n": 3}, {"label": "Jul 30", "full": "Jul 30", "est": 1.5, "act": 0.75, "n": 4}, {"label": "Jul 31", "full": "Jul 31", "est": 4.0, "act": 1.0, "n": 7}, {"label": "Aug 3", "full": "Aug 3", "est": 3.75, "act": 0.25, "n": 6}, {"label": "Aug 4", "full": "Aug 4", "est": 6.0, "act": 4.0, "n": 10}, {"label": "Aug 5", "full": "Aug 5", "est": 6.0, "act": 2.75, "n": 6}, {"label": "Aug 6", "full": "Aug 6", "est": 6.0, "act": 4.75, "n": 6}, {"label": "Aug 7", "full": "Aug 7", "est": 4.5, "act": 2.5, "n": 5}];
+
+  var VARIANCE = [{"item": "Develop a presentation/deck defining the media strategy problem space at G&A", "date": "Aug 5", "est": 2, "act": 0, "status": "Carried"}, {"item": "J&J: Handoff doc for Travis", "date": "Jul 27", "est": 1.5, "act": 0, "status": "Carried"}, {"item": "Alamo: Asana unified schedule \u2014 review last projects (Battle Theater/Lobby Wall/QMD Slider)", "date": "Jul 27", "est": 1.5, "act": 0, "status": "Carried"}, {"item": "Develop media strategy decks", "date": "Aug 7", "est": 2, "act": 0.5, "status": "Carried"}, {"item": "NSM: Compile tech docs \u2014 review draft, send to Beef/Gary/James/Thomas", "date": "Jul 27", "est": 1, "act": 0, "status": "Carried"}, {"item": "NSM: Compile all tech documentation into one comprehensive manual", "date": "Jul 31", "est": 1, "act": 0, "status": "Carried"}, {"item": "Run inbox-stale-sweep \u2014 clear the stale starred Gmail / saved Slack backlog", "date": "Jul 31", "est": 1, "act": 0, "status": "Carried"}, {"item": "NSM: Compile all tech documentation into one comprehensive manual", "date": "Aug 3", "est": 1, "act": 0, "status": "Carried"}];
+
+  var THREADS = [{"item": "NSM: Call to Action wall video for Beef", "days": 10, "first": "Jul 24", "last": "Aug 6", "est": 5.5, "act": 1.75, "status": "Done"}, {"item": "Confirm DV Work Order status", "days": 5, "first": "Jul 29", "last": "Aug 4", "est": 1.25, "act": 0.5, "status": "Done"}, {"item": "NSM: Compile all tech documentation into one comprehensive manual", "days": 5, "first": "Jul 31", "last": "Aug 6", "est": 4.5, "act": 0.5, "status": "Done"}, {"item": "Run inbox-stale-sweep \u2014 clear the stale starred Gmail / saved Slack backlog", "days": 4, "first": "Jul 31", "last": "Aug 5", "est": 4, "act": 0, "status": "Carried"}, {"item": "J&J: Handoff doc for Travis", "days": 3, "first": "Jul 24", "last": "Jul 28", "est": 4.5, "act": 1.5, "status": "Done"}, {"item": "Complete and send the 2x2 grid homework in writing", "days": 3, "first": "Jul 31", "last": "Aug 4", "est": 1.5, "act": 0.5, "status": "Done"}, {"item": "Pick back up the Project Closeout process \u2014 pressure-test the Framework's recommendation against capability reps", "days": 3, "first": "Aug 3", "last": "Aug 5", "est": 2.5, "act": 4.25, "status": "Done"}, {"item": "NSM status update per Beef's email", "days": 2, "first": "Jul 22", "last": "Jul 23", "est": 2, "act": 2, "status": "Done"}, {"item": "Weekly schedule refine", "days": 2, "first": "Jul 22", "last": "Jul 23", "est": 1.0, "act": 1.75, "status": "Done"}, {"item": "Compile NSM tech docs \u2014 review draft, send to Beef/Gary/James/Thomas", "days": 2, "first": "Jul 22", "last": "Jul 23", "est": 2, "act": 2, "status": "Carried"}, {"item": "OKC: Call Donna \u2013 contract, screen options, etc.", "days": 2, "first": "Jul 24", "last": "Jul 27", "est": 1.0, "act": 0, "status": "Dropped"}, {"item": "NSM: Compile tech docs \u2014 review draft, send to Beef/Gary/James/Thomas", "days": 2, "first": "Jul 24", "last": "Jul 27", "est": 2, "act": 0, "status": "Carried"}, {"item": "Alamo: Asana unified schedule \u2014 review last projects (Battle Theater/Lobby Wall/QMD Slider)", "days": 2, "first": "Jul 24", "last": "Jul 27", "est": 3.0, "act": 0, "status": "Carried"}, {"item": "J&J: Gesture booth Asana setup", "days": 2, "first": "Jul 24", "last": "Jul 27", "est": 1.0, "act": 0.5, "status": "Done"}, {"item": "NSM: Compile tech docs \u2014 review/edit draft", "days": 2, "first": "Jul 28", "last": "Jul 29", "est": 2, "act": 1.75, "status": "Done"}, {"item": "OKC: Kari EOW update email \u2014 draft + send (Friday recurring)", "days": 2, "first": "Jul 31", "last": "Aug 7", "est": 1.0, "act": 0.5, "status": "Carried"}, {"item": "Jeremy redline review", "days": 2, "first": "Aug 4", "last": "Aug 5", "est": 1.0, "act": 0.75, "status": "Done"}, {"item": "Develop a presentation/deck defining the media strategy problem space at G&A", "days": 2, "first": "Aug 5", "last": "Aug 6", "est": 4, "act": 1, "status": "Carried"}, {"item": "Pick back up the Project Closeout process", "days": 2, "first": "Aug 6", "last": "Aug 7", "est": 1.0, "act": 1.0, "status": "Done"}, {"item": "Review Stoked project materials once Clare sends them", "days": 2, "first": "Aug 6", "last": "Aug 7", "est": 1.0, "act": 0.75, "status": "Carried"}];
+
+
+  function fmtHrs(h) {
+    var s = h.toFixed(2);
+    s = s.replace(/0$/, '').replace(/\.$/, '');
+    return s + 'h';
+  }
+
+  // ---- daily est vs actual grouped bar chart ----
+  (function () {
+    var box = document.getElementById('chart-est');
+    var tt = document.getElementById('tt-est');
+    var W = box.clientWidth || 500, H = 210;
+    var padTop = 10, padBottom = 22, padLeft = 6, padRight = 6;
+    var plotH = H - padTop - padBottom;
+    var n = ESTVACT.length;
+    var bandGap = 10;
+    var bandW = (W - padLeft - padRight) / n;
+    var pairW = Math.min(30, bandW - bandGap);
+    var barW = (pairW - 2) / 2;
+
+    var maxVal = Math.max.apply(null, ESTVACT.map(function (d) { return Math.max(d.est, d.act); }));
+    maxVal = Math.ceil(maxVal);
+
+    var svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svg.setAttribute('viewBox', '0 0 ' + W + ' ' + H);
+    svg.setAttribute('height', H);
+
+    [0, 0.5, 1].forEach(function (f) {
+      var y = padTop + plotH * (1 - f);
+      var line = document.createElementNS(svg.namespaceURI, 'line');
+      line.setAttribute('x1', padLeft); line.setAttribute('x2', W - padRight);
+      line.setAttribute('y1', y); line.setAttribute('y2', y);
+      line.setAttribute('stroke', cssVar('--line')); line.setAttribute('stroke-width', '1');
+      svg.appendChild(line);
+      var lbl = document.createElementNS(svg.namespaceURI, 'text');
+      lbl.setAttribute('x', padLeft); lbl.setAttribute('y', y - 4);
+      lbl.setAttribute('font-size', '9.5'); lbl.setAttribute('fill', cssVar('--ink-muted'));
+      lbl.textContent = Math.round(maxVal * f) + 'h';
+      svg.appendChild(lbl);
+    });
+
+    ESTVACT.forEach(function (d, i) {
+      var bx = padLeft + i * bandW + (bandW - pairW) / 2;
+      function drawBar(x, val, color) {
+        var h = Math.max((val / maxVal) * plotH, 1);
+        var y = padTop + plotH - h;
+        var rect = document.createElementNS(svg.namespaceURI, 'rect');
+        rect.setAttribute('x', x); rect.setAttribute('width', barW);
+        rect.setAttribute('y', y); rect.setAttribute('height', h);
+        rect.setAttribute('rx', '3'); rect.setAttribute('ry', '3');
+        rect.setAttribute('fill', color);
+        rect.setAttribute('class', 'bar-seg');
+        svg.appendChild(rect);
+      }
+      drawBar(bx, d.est, cssVar('--ink-muted-2'));
+      drawBar(bx + barW + 2, d.act, cssVar('--accent'));
+
+      var hit = document.createElementNS(svg.namespaceURI, 'rect');
+      hit.setAttribute('x', bx - bandGap / 2);
+      hit.setAttribute('width', pairW + bandGap);
+      hit.setAttribute('y', padTop);
+      hit.setAttribute('height', plotH);
+      hit.setAttribute('fill', 'transparent');
+      hit.addEventListener('mouseenter', function () { showTooltip(d, bx + pairW / 2); });
+      hit.addEventListener('mousemove', function () { showTooltip(d, bx + pairW / 2); });
+      hit.addEventListener('mouseleave', hideTooltip);
+      svg.appendChild(hit);
+
+      var xl = document.createElementNS(svg.namespaceURI, 'text');
+      xl.setAttribute('x', bx + pairW / 2); xl.setAttribute('y', H - 6);
+      xl.setAttribute('font-size', '10'); xl.setAttribute('fill', cssVar('--ink-muted'));
+      xl.setAttribute('text-anchor', 'middle');
+      xl.textContent = d.label;
+      svg.appendChild(xl);
+    });
+
+    box.appendChild(svg);
+
+    function showTooltip(d, cx) {
+      var v = d.act - d.est;
+      var vLabel = (v > 0 ? '+' : '') + fmtHrs(v);
+      tt.innerHTML =
+        '<div class="tt-title">' + d.full + ' &middot; ' + d.n + ' items</div>' +
+        '<div class="tt-row"><span class="tt-key"><span class="stroke" style="border-color:' + cssVar('--ink-muted-2') + '"></span>Estimated</span><span class="tt-val">' + fmtHrs(d.est) + '</span></div>' +
+        '<div class="tt-row"><span class="tt-key"><span class="stroke" style="border-color:' + cssVar('--accent') + '"></span>Actual</span><span class="tt-val">' + fmtHrs(d.act) + '</span></div>' +
+        '<div class="tt-row"><span class="tt-key">Variance</span><span class="tt-val">' + vLabel + '</span></div>';
+      tt.style.left = cx + 'px'; tt.style.top = '0px'; tt.style.opacity = '1';
+    }
+    function hideTooltip() { tt.style.opacity = '0'; }
+  })();
+
+  // ---- biggest misses table ----
+  (function () {
+    var tbody = document.getElementById('tbl-variance');
+    VARIANCE.forEach(function (v) {
+      var tr = document.createElement('tr');
+
+      var tdItem = document.createElement('td');
+      var span = document.createElement('span');
+      span.className = 'cell-item';
+      span.appendChild(document.createTextNode(v.item));
+      var sub = document.createElement('span');
+      sub.className = 'sub';
+      sub.appendChild(document.createTextNode(v.date));
+      span.appendChild(sub);
+      tdItem.appendChild(span);
+
+      var tdEst = document.createElement('td'); tdEst.className = 'num'; tdEst.textContent = v.est + 'h';
+      var tdAct = document.createElement('td'); tdAct.className = 'num'; tdAct.textContent = v.act + 'h';
+
+      var tdDelta = document.createElement('td'); tdDelta.className = 'num';
+      var delta = v.act - v.est;
+      var dspan = document.createElement('span');
+      dspan.className = 'delta ' + (delta > 0 ? 'over' : 'under');
+      dspan.textContent = (delta > 0 ? '+' : '') + delta + 'h';
+      tdDelta.appendChild(dspan);
+
+      var tdStatus = document.createElement('td');
+      var pillClass = v.status === 'Done' ? 'good' : (v.status === 'Carried' ? 'warning' : 'neutral');
+      var pill = document.createElement('span');
+      pill.className = 'pill ' + pillClass;
+      pill.innerHTML = '<span class="pilldot"></span>';
+      pill.appendChild(document.createTextNode(v.status));
+      tdStatus.appendChild(pill);
+
+      tr.appendChild(tdItem); tr.appendChild(tdEst); tr.appendChild(tdAct); tr.appendChild(tdDelta); tr.appendChild(tdStatus);
+      tbody.appendChild(tr);
+    });
+  })();
+
+  // ---- task threads table ----
+  (function () {
+    var tbody = document.getElementById('tbl-threads');
+    THREADS.forEach(function (t) {
+      var tr = document.createElement('tr');
+
+      var tdItem = document.createElement('td');
+      var span = document.createElement('span');
+      span.className = 'cell-item';
+      span.appendChild(document.createTextNode(t.item));
+      tdItem.appendChild(span);
+      tdItem.style.maxWidth = '360px';
+
+      var tdSpan = document.createElement('td');
+      var sp = document.createElement('span');
+      sp.className = 'span-pill';
+      sp.textContent = t.days + 'd \u00b7 ' + t.first + '\u2013' + t.last;
+      tdSpan.appendChild(sp);
+
+      var tdEst = document.createElement('td'); tdEst.className = 'num'; tdEst.textContent = fmtHrs(t.est);
+      var tdAct = document.createElement('td'); tdAct.className = 'num'; tdAct.textContent = fmtHrs(t.act);
+
+      var tdStatus = document.createElement('td');
+      var pillClass = t.status === 'Done' ? 'good' : (t.status === 'Carried' ? 'warning' : 'neutral');
+      var pill = document.createElement('span');
+      pill.className = 'pill ' + pillClass;
+      pill.innerHTML = '<span class="pilldot"></span>';
+      pill.appendChild(document.createTextNode(t.status));
+      tdStatus.appendChild(pill);
+
+      tr.appendChild(tdItem); tr.appendChild(tdSpan); tr.appendChild(tdEst); tr.appendChild(tdAct); tr.appendChild(tdStatus);
+      tbody.appendChild(tr);
+    });
+  })();
+
+})();
+</script>

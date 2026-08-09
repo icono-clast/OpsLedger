@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ops Ledger</title>
+<style>
+  :root {
+    color-scheme: light;
+    --page: #ECEEE7; --surface: #F8F9F4; --surface-hover: #F1F3EA;
+    --ink: #1B231B; --ink-secondary: #55604F; --ink-muted: #8B9483;
+    --line: #DBDFCF; --line-strong: #C7CDB8;
+    --accent: #A9762F; --accent-ink: #8A5F24; --accent-soft: rgba(169,118,47,0.14);
+    --shadow: 0 1px 2px rgba(27,35,27,0.04), 0 1px 1px rgba(27,35,27,0.03);
+    --font-sans: -apple-system, "SF Pro Text", system-ui, "Segoe UI", Helvetica, Arial, sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:where(:not([data-theme="light"])) {
+      color-scheme: dark;
+      --page: #12150F; --surface: #181C14; --surface-hover: #1F2418;
+      --ink: #EDEFE6; --ink-secondary: #ABB39F; --ink-muted: #6E7768;
+      --line: #2A2F22; --line-strong: #3A4030;
+      --accent: #D9A24F; --accent-ink: #E9B872; --accent-soft: rgba(217,162,79,0.18);
+      --shadow: 0 1px 2px rgba(0,0,0,0.3);
+    }
+  }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --page: #12150F; --surface: #181C14; --surface-hover: #1F2418;
+    --ink: #EDEFE6; --ink-secondary: #ABB39F; --ink-muted: #6E7768;
+    --line: #2A2F22; --line-strong: #3A4030;
+    --accent: #D9A24F; --accent-ink: #E9B872; --accent-soft: rgba(217,162,79,0.18);
+    --shadow: 0 1px 2px rgba(0,0,0,0.3);
+  }
+  :root[data-theme="light"] {
+    color-scheme: light;
+    --page: #ECEEE7; --surface: #F8F9F4; --surface-hover: #F1F3EA;
+    --ink: #1B231B; --ink-secondary: #55604F; --ink-muted: #8B9483;
+    --line: #DBDFCF; --line-strong: #C7CDB8;
+    --accent: #A9762F; --accent-ink: #8A5F24; --accent-soft: rgba(169,118,47,0.14);
+    --shadow: 0 1px 2px rgba(27,35,27,0.04), 0 1px 1px rgba(27,35,27,0.03);
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--page); color: var(--ink); font-family: var(--font-sans); -webkit-font-smoothing: antialiased; display: flex; align-items: center; justify-content: center; min-height: 100vh; }
+  .wrap { max-width: 640px; width: 100%; padding: 40px 24px; }
+  .eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; color: var(--accent-ink); text-align: center; }
+  h1 { font-size: 30px; font-weight: 700; letter-spacing: -0.012em; margin: 6px 0 8px; text-align: center; }
+  .sub { font-size: 13px; color: var(--ink-secondary); text-align: center; margin-bottom: 32px; }
+  .cards { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  @media (max-width: 560px) { .cards { grid-template-columns: 1fr; } }
+  a.card { display: block; background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 24px; text-decoration: none; color: inherit; box-shadow: var(--shadow); transition: border-color .12s, transform .12s; }
+  a.card:hover { border-color: var(--accent); transform: translateY(-1px); }
+  .card-title { font-size: 18px; font-weight: 700; margin-bottom: 6px; }
+  .card-desc { font-size: 12.5px; color: var(--ink-secondary); line-height: 1.5; }
+  .card-arrow { font-size: 12px; color: var(--accent-ink); font-weight: 600; margin-top: 14px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="eyebrow">Ops Ledger</div>
+  <h1>Josiah Hobson</h1>
+  <div class="sub">Regenerated nightly &mdash; no more one-off review artifacts.</div>
+  <div class="cards">
+    <a class="card" href="time-kantata.html">
+      <div class="card-title">Time</div>
+      <div class="card-desc">Log time into Kantata, review the week/month detail, and check the billable split.</div>
+      <div class="card-arrow">Open &rarr;</div>
+    </a>
+    <a class="card" href="tasks.html">
+      <div class="card-title">Tasks</div>
+      <div class="card-desc">Estimate accuracy, biggest misses, and multi-day task threads.</div>
+      <div class="card-arrow">Open &rarr;</div>
+    </a>
+  </div>
+</div>
+</body>
+</html>
