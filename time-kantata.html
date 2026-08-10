@@ -215,7 +215,7 @@
   .kt-hint { font-size: 11px; color: var(--ink-muted); margin-left: 8px; }
 
   .kt-wrap { overflow-x: auto; padding: 14px 22px 20px; }
-  .kt-wrap table { width: 100%; border-collapse: collapse; table-layout: fixed; }
+  .kt-wrap table { width: 976px; border-collapse: collapse; table-layout: fixed; }
   .kt-wrap th { background: var(--page); padding: 7px 5px; font-size: 9.5px; font-weight: 700; color: var(--ink-muted); text-transform: uppercase; letter-spacing: 0.03em; border-bottom: 2px solid var(--line); text-align: center; white-space: nowrap; }
   .kt-wrap th.col-project { text-align: left; padding-left: 10px; }
   .kt-wrap th.col-task { text-align: left; }
@@ -225,8 +225,8 @@
   .kt-wrap tbody tr:last-child { border-bottom: none; }
   .kt-wrap tbody tr:hover { background: var(--surface-hover); }
   .kt-wrap td { vertical-align: middle; }
-  .project-cell { padding: 8px 8px 8px 10px; font-weight: 700; font-size: 12px; border-left: 3px solid transparent; max-width: 200px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .task-cell { padding: 8px 8px; font-size: 11px; color: var(--ink-muted); max-width: 165px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .project-cell { padding: 8px 8px 8px 10px; font-weight: 700; font-size: 12px; border-left: 3px solid transparent; white-space: normal; line-height: 1.3; word-break: break-word; }
+  .task-cell { padding: 8px 8px; font-size: 11px; color: var(--ink-muted); white-space: normal; line-height: 1.3; word-break: break-word; }
   .day-cell { text-align: center; min-width: 66px; padding: 0; }
   .total-cell { text-align: right; padding: 8px 10px; font-weight: 700; font-size: 13px; white-space: nowrap; min-width: 66px; border-left: 1px solid var(--line); }
 
@@ -274,7 +274,7 @@
       <h1>Time &mdash; Kantata</h1>
       <div class="subtitle">Week-by-week crosswalk to Kantata's own project/task rows &mdash; hover a cell to preview notes, click to copy them for pasting into Kantata.</div>
     </div>
-    <div class="period-badge"><span class="dot"></span>Synced Aug 10, 2026 &middot; 11:35am</div>
+    <div class="period-badge"><span class="dot"></span>Synced Aug 10, 2026 &middot; 11:43am</div>
   </div>
 
   <div class="ledger-sheet full">
@@ -296,6 +296,13 @@
     <div class="grid-summary" id="summaryBar"></div>
     <div class="kt-wrap">
       <table>
+        <colgroup>
+          <col style="width:220px">
+          <col style="width:190px">
+          <col style="width:70px"><col style="width:70px"><col style="width:70px"><col style="width:70px">
+          <col style="width:70px"><col style="width:70px"><col style="width:70px">
+          <col style="width:76px">
+        </colgroup>
         <thead id="thead"></thead>
         <tbody id="tbody"></tbody>
         <tfoot id="tfoot"></tfoot>
