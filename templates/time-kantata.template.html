@@ -317,15 +317,19 @@
 const ALL_ENTRIES = __ALL_ENTRIES__;
 const PROJECT_MAP = __PROJECT_MAP__;
 
+// Project display name only -- the Task column comes from each entry's own
+// kantata_task, not a per-project default, since a handful of internal
+// projects (Admin Prod Dept, L&D General, ...) legitimately log time under
+// several different Kantata task categories.
 const PROJ = {};
 Object.values(PROJECT_MAP).forEach(p => {
   if (p.kantata_id && p.kantata_name) {
-    PROJ[p.kantata_id] = { name: p.kantata_name, task: p.kantata_task || 'Time Tracking', billable: p.billable };
+    PROJ[p.kantata_id] = { name: p.kantata_name, billable: p.billable };
   }
 });
 ALL_ENTRIES.forEach(e => {
   if (!PROJ[e.kantata_id]) {
-    PROJ[e.kantata_id] = { name: e.client + ' | ' + e.project, task: 'Time Tracking', billable: e.billable };
+    PROJ[e.kantata_id] = { name: e.client + ' | ' + e.project, billable: e.billable };
   }
 });
 
@@ -356,22 +360,31 @@ function aggregateWeek(sun) {
   const dateSet = new Set(dates);
   const week = ALL_ENTRIES.filter(e => dateSet.has(e.date));
 
+  // Group by (kantata_id, kantata_task) -- not kantata_id alone -- so a
+  // project spanning several Kantata task categories gets one row per
+  // category instead of collapsing them under a single guessed task.
   const groups = {};
   week.forEach(e => {
-    groups[e.kantata_id] = groups[e.kantata_id] || {};
-    groups[e.kantata_id][e.date] = groups[e.kantata_id][e.date] || { h: 0, parts: [] };
-    groups[e.kantata_id][e.date].h += e.hours;
-    groups[e.kantata_id][e.date].parts.push(e.notes ? e.activity + ': ' + e.notes : e.activity);
+    const key = e.kantata_id + '||' + e.kantata_task;
+    groups[key] = groups[key] || { kantata_id: e.kantata_id, task: e.kantata_task, billable: e.billable, byDate: {} };
+    const g = groups[key];
+    g.byDate[e.date] = g.byDate[e.date] || { h: 0, parts: [] };
+    g.byDate[e.date].h += e.hours;
+    g.byDate[e.date].parts.push(e.notes ? e.activity + ': ' + e.notes : e.activity);
   });
 
-  const rows = Object.entries(groups).map(([kid, dayMap]) => {
-    const p = PROJ[kid] || { name: kid, task: '\u2014', billable: true };
+  const rows = Object.values(groups).map(g => {
+    const p = PROJ[g.kantata_id] || { name: g.kantata_id, billable: g.billable };
     const days = {};
-    dates.forEach(d => { if (dayMap[d]) days[d] = { h: dayMap[d].h, n: dayMap[d].parts.join('\n') }; });
-    return { kid, ...p, days };
+    dates.forEach(d => { if (g.byDate[d]) days[d] = { h: g.byDate[d].h, n: g.byDate[d].parts.join('\n') }; });
+    return { name: p.name, task: g.task, billable: g.billable, days };
   });
 
-  rows.sort((a, b) => { if (a.billable !== b.billable) return a.billable ? 1 : -1; return a.name.localeCompare(b.name); });
+  rows.sort((a, b) => {
+    if (a.billable !== b.billable) return a.billable ? 1 : -1;
+    if (a.name !== b.name) return a.name.localeCompare(b.name);
+    return a.task.localeCompare(b.task);
+  });
   return { dates, rows };
 }
 

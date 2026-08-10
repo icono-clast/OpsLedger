@@ -81,6 +81,7 @@ def load_time_log():
             "client": e["client"],
             "project": e["project"],
             "kantata_id": e["kantata_id"],
+            "kantata_task": e["kantata_task"],
             "activity": e["activity"],
             "hours": e["hours"],
             "notes": e.get("notes", ""),
