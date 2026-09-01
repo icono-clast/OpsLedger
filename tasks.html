@@ -165,34 +165,34 @@
       <h1>Tasks</h1>
       <div class="subtitle">How well today-list items get estimated and finished, reconciled each evening. Initiatives (grouping related tasks) are coming &mdash; this page will grow.</div>
     </div>
-    <div class="period-badge"><span class="dot"></span>Synced Aug 30, 2026 &middot; 11:00pm</div>
+    <div class="period-badge"><span class="dot"></span>Synced Aug 31, 2026 &middot; 11:00pm</div>
   </div>
 
   <div class="hero-banner">
     <div class="hero-num">
       <div class="hn-label">Estimate accuracy</div>
-      <div class="hn-value">40<span class="u">%</span></div>
-      <div class="hn-meta">6 of 15 logged items landed within &plusmn;15&nbsp;min of estimate</div>
+      <div class="hn-value">41<span class="u">%</span></div>
+      <div class="hn-meta">9 of 22 logged items landed within &plusmn;15&nbsp;min of estimate</div>
     </div>
     <div class="hero-support">
       <div class="hs-item">
         <div class="hs-label">Outcomes</div>
-        <div class="hs-value" style="font-size:15px; display:flex; gap:8px;"><span style="color:var(--good)">5 done</span><span style="color:var(--warning)">10 carried</span></div>
+        <div class="hs-value" style="font-size:15px; display:flex; gap:8px;"><span style="color:var(--good)">7 done</span><span style="color:var(--warning)">15 carried</span></div>
         <div class="status-mini" style="margin-top:7px;">
-          <span style="width:33.3%; background:var(--good)"></span>
-          <span style="width:66.7%; background:var(--warning)"></span>
+          <span style="width:31.8%; background:var(--good)"></span>
+          <span style="width:68.2%; background:var(--warning)"></span>
           <span style="width:0%; background:var(--ink-muted-2)"></span>
         </div>
       </div>
       <div class="hs-item">
         <div class="hs-label">When missed</div>
-        <div class="hs-value">8<span style="font-size:12px; color:var(--ink-secondary); font-weight:600;"> under</span> / 1<span style="font-size:12px; color:var(--ink-secondary); font-weight:600;"> over</span></div>
+        <div class="hs-value">12<span style="font-size:12px; color:var(--ink-secondary); font-weight:600;"> under</span> / 1<span style="font-size:12px; color:var(--ink-secondary); font-weight:600;"> over</span></div>
         <div class="hs-sub">most misses are stalls, not bad time-boxing</div>
       </div>
       <div class="hs-item">
         <div class="hs-label">Hours</div>
-        <div class="hs-value">5<span style="font-size:12px; color:var(--ink-secondary); font-weight:600;"> of 12.5 est</span></div>
-        <div class="hs-sub">avg miss 1h when off</div>
+        <div class="hs-value">6.5<span style="font-size:12px; color:var(--ink-secondary); font-weight:600;"> of 21 est</span></div>
+        <div class="hs-sub">avg miss 1.2h when off</div>
       </div>
     </div>
   </div>
@@ -210,15 +210,15 @@
         </div>
       </div>
       <div class="section">
-        <div class="section-title"><span class="label">Outcomes &mdash; all 15 items</span></div>
+        <div class="section-title"><span class="label">Outcomes &mdash; all 22 items</span></div>
         <div class="legend">
-          <span class="legend-item"><span class="swatch" style="background:var(--good)"></span>Done &middot; 5</span>
-          <span class="legend-item"><span class="swatch" style="background:var(--warning)"></span>Carried &middot; 10</span>
+          <span class="legend-item"><span class="swatch" style="background:var(--good)"></span>Done &middot; 7</span>
+          <span class="legend-item"><span class="swatch" style="background:var(--warning)"></span>Carried &middot; 15</span>
           <span class="legend-item"><span class="swatch" style="background:var(--ink-muted-2)"></span>Dropped &middot; 0</span>
         </div>
         <div class="status-mini" style="margin-top:10px; height:12px;">
-          <span style="width:33.3%; background:var(--good)"></span>
-          <span style="width:66.7%; background:var(--warning)"></span>
+          <span style="width:31.8%; background:var(--good)"></span>
+          <span style="width:68.2%; background:var(--warning)"></span>
           <span style="width:0%; background:var(--ink-muted-2)"></span>
         </div>
       </div>
@@ -268,11 +268,11 @@
   var root = document.documentElement;
   function cssVar(name) { return getComputedStyle(root).getPropertyValue(name).trim(); }
 
-  var ESTVACT = [{"label": "Aug 18", "full": "Aug 18", "est": 4.0, "act": 1.5, "n": 3}, {"label": "Aug 19", "full": "Aug 19", "est": 4.0, "act": 2.0, "n": 4}, {"label": "Aug 21", "full": "Aug 21", "est": 4.5, "act": 1.5, "n": 8}];
+  var ESTVACT = [{"label": "Aug 18", "full": "Aug 18", "est": 4.0, "act": 1.5, "n": 3}, {"label": "Aug 19", "full": "Aug 19", "est": 4.0, "act": 2.0, "n": 4}, {"label": "Aug 21", "full": "Aug 21", "est": 4.5, "act": 1.5, "n": 8}, {"label": "Aug 31", "full": "Aug 31", "est": 8.5, "act": 1.5, "n": 7}];
 
-  var VARIANCE = [{"item": "PlusDocs / Gamma testing", "date": "Aug 21", "est": 1.5, "act": 0, "status": "Carried"}, {"item": "Update LinkedIn profile", "date": "Aug 18", "est": 1, "act": 0, "status": "Carried"}, {"item": "Kris Helmick sub contract", "date": "Aug 18", "est": 1, "act": 0, "status": "Carried"}, {"item": "Pick up Media Strategy deck outline (deck 1)", "date": "Aug 19", "est": 1, "act": 2, "status": "Done"}, {"item": "Update LinkedIn profile", "date": "Aug 19", "est": 1, "act": 0, "status": "Carried"}, {"item": "Chris's terminology > MS framework", "date": "Aug 19", "est": 1, "act": 0, "status": "Carried"}, {"item": "Kris Helmick sub contract", "date": "Aug 19", "est": 1, "act": 0, "status": "Carried"}, {"item": "Kris Helmick sub contract", "date": "Aug 21", "est": 1, "act": 0, "status": "Carried"}];
+  var VARIANCE = [{"item": "Develop client-facing Media Strategy deck (diagnostic-questions structure)", "date": "Aug 31", "est": 4, "act": 0, "status": "Carried"}, {"item": "PlusDocs / Gamma testing", "date": "Aug 21", "est": 1.5, "act": 0, "status": "Carried"}, {"item": "Update LinkedIn profile", "date": "Aug 18", "est": 1, "act": 0, "status": "Carried"}, {"item": "Kris Helmick sub contract", "date": "Aug 18", "est": 1, "act": 0, "status": "Carried"}, {"item": "Pick up Media Strategy deck outline (deck 1)", "date": "Aug 19", "est": 1, "act": 2, "status": "Done"}, {"item": "Update LinkedIn profile", "date": "Aug 19", "est": 1, "act": 0, "status": "Carried"}, {"item": "Chris's terminology > MS framework", "date": "Aug 19", "est": 1, "act": 0, "status": "Carried"}, {"item": "Kris Helmick sub contract", "date": "Aug 19", "est": 1, "act": 0, "status": "Carried"}];
 
-  var THREADS = [{"item": "NSM: Call to Action wall video for Beef", "days": 10, "first": "Jul 24", "last": "Aug 6", "est": 5.5, "act": 1.75, "status": "Done"}, {"item": "Update LinkedIn profile", "days": 7, "first": "Aug 10", "last": "Aug 19", "est": 6, "act": 0, "status": "Carried"}, {"item": "Kris Helmick sub contract", "days": 6, "first": "Aug 11", "last": "Aug 21", "est": 6, "act": 0, "status": "Carried"}, {"item": "Confirm DV Work Order status", "days": 5, "first": "Jul 29", "last": "Aug 4", "est": 1.25, "act": 0.5, "status": "Done"}, {"item": "NSM: Compile all tech documentation into one comprehensive manual", "days": 5, "first": "Jul 31", "last": "Aug 6", "est": 4.5, "act": 0.5, "status": "Done"}, {"item": "Run inbox-stale-sweep \u2014 clear the stale starred Gmail / saved Slack backlog", "days": 4, "first": "Jul 31", "last": "Aug 5", "est": 4, "act": 0, "status": "Carried"}, {"item": "J&J: Handoff doc for Travis", "days": 3, "first": "Jul 24", "last": "Jul 28", "est": 4.5, "act": 1.5, "status": "Done"}, {"item": "Complete and send the 2x2 grid homework in writing", "days": 3, "first": "Jul 31", "last": "Aug 4", "est": 1.5, "act": 0.5, "status": "Done"}, {"item": "Pick back up the Project Closeout process \u2014 pressure-test the Framework's recommendation against capability reps", "days": 3, "first": "Aug 3", "last": "Aug 5", "est": 2.5, "act": 4.25, "status": "Done"}, {"item": "Develop media strategy decks", "days": 3, "first": "Aug 7", "last": "Aug 11", "est": 6, "act": 4.0, "status": "Carried"}, {"item": "NSM status update per Beef's email", "days": 2, "first": "Jul 22", "last": "Jul 23", "est": 2, "act": 2, "status": "Done"}, {"item": "Weekly schedule refine", "days": 2, "first": "Jul 22", "last": "Jul 23", "est": 1.0, "act": 1.75, "status": "Done"}, {"item": "Compile NSM tech docs \u2014 review draft, send to Beef/Gary/James/Thomas", "days": 2, "first": "Jul 22", "last": "Jul 23", "est": 2, "act": 2, "status": "Carried"}, {"item": "OKC: Call Donna \u2013 contract, screen options, etc.", "days": 2, "first": "Jul 24", "last": "Jul 27", "est": 1.0, "act": 0, "status": "Dropped"}, {"item": "NSM: Compile tech docs \u2014 review draft, send to Beef/Gary/James/Thomas", "days": 2, "first": "Jul 24", "last": "Jul 27", "est": 2, "act": 0, "status": "Carried"}, {"item": "Alamo: Asana unified schedule \u2014 review last projects (Battle Theater/Lobby Wall/QMD Slider)", "days": 2, "first": "Jul 24", "last": "Jul 27", "est": 3.0, "act": 0, "status": "Carried"}, {"item": "J&J: Gesture booth Asana setup", "days": 2, "first": "Jul 24", "last": "Jul 27", "est": 1.0, "act": 0.5, "status": "Done"}, {"item": "NSM: Compile tech docs \u2014 review/edit draft", "days": 2, "first": "Jul 28", "last": "Jul 29", "est": 2, "act": 1.75, "status": "Done"}, {"item": "OKC: Kari EOW update email \u2014 draft + send (Friday recurring)", "days": 2, "first": "Jul 31", "last": "Aug 7", "est": 1.0, "act": 0.5, "status": "Carried"}, {"item": "Jeremy redline review", "days": 2, "first": "Aug 4", "last": "Aug 5", "est": 1.0, "act": 0.75, "status": "Done"}];
+  var THREADS = [{"item": "NSM: Call to Action wall video for Beef", "days": 10, "first": "Jul 24", "last": "Aug 6", "est": 5.5, "act": 1.75, "status": "Done"}, {"item": "Update LinkedIn profile", "days": 8, "first": "Aug 10", "last": "Aug 31", "est": 7, "act": 0, "status": "Carried"}, {"item": "Kris Helmick sub contract", "days": 7, "first": "Aug 11", "last": "Aug 31", "est": 7, "act": 0, "status": "Carried"}, {"item": "Confirm DV Work Order status", "days": 5, "first": "Jul 29", "last": "Aug 4", "est": 1.25, "act": 0.5, "status": "Done"}, {"item": "NSM: Compile all tech documentation into one comprehensive manual", "days": 5, "first": "Jul 31", "last": "Aug 6", "est": 4.5, "act": 0.5, "status": "Done"}, {"item": "Run inbox-stale-sweep \u2014 clear the stale starred Gmail / saved Slack backlog", "days": 4, "first": "Jul 31", "last": "Aug 5", "est": 4, "act": 0, "status": "Carried"}, {"item": "J&J: Handoff doc for Travis", "days": 3, "first": "Jul 24", "last": "Jul 28", "est": 4.5, "act": 1.5, "status": "Done"}, {"item": "Complete and send the 2x2 grid homework in writing", "days": 3, "first": "Jul 31", "last": "Aug 4", "est": 1.5, "act": 0.5, "status": "Done"}, {"item": "Pick back up the Project Closeout process \u2014 pressure-test the Framework's recommendation against capability reps", "days": 3, "first": "Aug 3", "last": "Aug 5", "est": 2.5, "act": 4.25, "status": "Done"}, {"item": "Develop media strategy decks", "days": 3, "first": "Aug 7", "last": "Aug 11", "est": 6, "act": 4.0, "status": "Carried"}, {"item": "NSM status update per Beef's email", "days": 2, "first": "Jul 22", "last": "Jul 23", "est": 2, "act": 2, "status": "Done"}, {"item": "Weekly schedule refine", "days": 2, "first": "Jul 22", "last": "Jul 23", "est": 1.0, "act": 1.75, "status": "Done"}, {"item": "Compile NSM tech docs \u2014 review draft, send to Beef/Gary/James/Thomas", "days": 2, "first": "Jul 22", "last": "Jul 23", "est": 2, "act": 2, "status": "Carried"}, {"item": "OKC: Call Donna \u2013 contract, screen options, etc.", "days": 2, "first": "Jul 24", "last": "Jul 27", "est": 1.0, "act": 0, "status": "Dropped"}, {"item": "NSM: Compile tech docs \u2014 review draft, send to Beef/Gary/James/Thomas", "days": 2, "first": "Jul 24", "last": "Jul 27", "est": 2, "act": 0, "status": "Carried"}, {"item": "Alamo: Asana unified schedule \u2014 review last projects (Battle Theater/Lobby Wall/QMD Slider)", "days": 2, "first": "Jul 24", "last": "Jul 27", "est": 3.0, "act": 0, "status": "Carried"}, {"item": "J&J: Gesture booth Asana setup", "days": 2, "first": "Jul 24", "last": "Jul 27", "est": 1.0, "act": 0.5, "status": "Done"}, {"item": "NSM: Compile tech docs \u2014 review/edit draft", "days": 2, "first": "Jul 28", "last": "Jul 29", "est": 2, "act": 1.75, "status": "Done"}, {"item": "OKC: Kari EOW update email \u2014 draft + send (Friday recurring)", "days": 2, "first": "Jul 31", "last": "Aug 7", "est": 1.0, "act": 0.5, "status": "Carried"}, {"item": "Jeremy redline review", "days": 2, "first": "Aug 4", "last": "Aug 5", "est": 1.0, "act": 0.75, "status": "Done"}];
 
 
   function fmtHrs(h) {
