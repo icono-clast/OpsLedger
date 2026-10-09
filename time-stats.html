@@ -221,7 +221,7 @@
       <h1>Time &mdash; Stats</h1>
       <div class="subtitle">Billable mix and activity split, at a glance. See Detail for day-by-day breakdowns and Kantata for logging time.</div>
     </div>
-    <div class="period-badge"><span class="dot"></span>Synced Oct 7, 2026 &middot; 11:00pm</div>
+    <div class="period-badge"><span class="dot"></span>Synced Oct 8, 2026 &middot; 11:00pm</div>
   </div>
 
 
@@ -230,21 +230,21 @@
       <div class="stat-label">% Billable</div>
       <div class="stat-value">25.7<span class="unit">%</span></div>
       <div class="meter-track"><div class="meter-fill" style="width:25.7%"></div></div>
-      <div class="stat-meta">99.5h billable of 387h logged</div>
+      <div class="stat-meta">101.5h billable of 394.5h logged</div>
     </div>
     <div class="stat-tile">
       <div class="stat-label">Total logged</div>
-      <div class="stat-value">387<span class="unit">hrs</span></div>
+      <div class="stat-value">394.5<span class="unit">hrs</span></div>
       <div class="stat-meta">10 weeks, 4 clients</div>
     </div>
     <div class="stat-tile">
       <div class="stat-label">Billable hours</div>
-      <div class="stat-value" style="color:var(--billable)">99.5<span class="unit">hrs</span></div>
+      <div class="stat-value" style="color:var(--billable)">101.5<span class="unit">hrs</span></div>
       <div class="stat-meta">client-facing work</div>
     </div>
     <div class="stat-tile">
       <div class="stat-label">Non-billable hours</div>
-      <div class="stat-value" style="color:var(--nonbillable)">287.5<span class="unit">hrs</span></div>
+      <div class="stat-value" style="color:var(--nonbillable)">293<span class="unit">hrs</span></div>
       <div class="stat-meta">G&amp;A / internal</div>
     </div>
   </div>
@@ -297,12 +297,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // ===================== Reporting section =====================
 
-  var WEEKLY = [{"label": "Aug 3", "full": "Week of Aug 3", "billable": 6.75, "nonbillable": 41.75, "partial": false}, {"label": "Aug 10", "full": "Week of Aug 10", "billable": 13.5, "nonbillable": 39.0, "partial": false}, {"label": "Aug 17", "full": "Week of Aug 17", "billable": 24.75, "nonbillable": 23.25, "partial": false}, {"label": "Aug 24", "full": "Week of Aug 24", "billable": 2.75, "nonbillable": 0.0, "partial": false}, {"label": "Aug 31", "full": "Week of Aug 31", "billable": 10.25, "nonbillable": 32.0, "partial": false}, {"label": "Sep 7", "full": "Week of Sep 7", "billable": 11.0, "nonbillable": 28.25, "partial": false}, {"label": "Sep 14", "full": "Week of Sep 14", "billable": 9.0, "nonbillable": 40.5, "partial": false}, {"label": "Sep 21", "full": "Week of Sep 21", "billable": 8.5, "nonbillable": 38.5, "partial": false}, {"label": "Sep 28", "full": "Week of Sep 28", "billable": 8.0, "nonbillable": 33.25, "partial": false}, {"label": "Oct 5", "full": "Week of Oct 5", "billable": 5.0, "nonbillable": 11.0, "partial": true}];
+  var WEEKLY = [{"label": "Aug 3", "full": "Week of Aug 3", "billable": 6.75, "nonbillable": 41.75, "partial": false}, {"label": "Aug 10", "full": "Week of Aug 10", "billable": 13.5, "nonbillable": 39.0, "partial": false}, {"label": "Aug 17", "full": "Week of Aug 17", "billable": 24.75, "nonbillable": 23.25, "partial": false}, {"label": "Aug 24", "full": "Week of Aug 24", "billable": 2.75, "nonbillable": 0.0, "partial": false}, {"label": "Aug 31", "full": "Week of Aug 31", "billable": 10.25, "nonbillable": 32.0, "partial": false}, {"label": "Sep 7", "full": "Week of Sep 7", "billable": 11.0, "nonbillable": 28.25, "partial": false}, {"label": "Sep 14", "full": "Week of Sep 14", "billable": 9.0, "nonbillable": 40.5, "partial": false}, {"label": "Sep 21", "full": "Week of Sep 21", "billable": 8.5, "nonbillable": 38.5, "partial": false}, {"label": "Sep 28", "full": "Week of Sep 28", "billable": 8.0, "nonbillable": 33.25, "partial": false}, {"label": "Oct 5", "full": "Week of Oct 5", "billable": 7.0, "nonbillable": 16.5, "partial": true}];
 
-  var PROJECTS = [{"name": "G&A / S&C Dept", "hours": 263.0, "billable": false}, {"name": "OKC / Foreword FD", "hours": 81.75, "billable": true}, {"name": "G&A / L&D General", "hours": 24.5, "billable": false}, {"name": "NSM / MPD Showcase", "hours": 16.75, "billable": true}, {"name": "J&J / Gesture Booth MPD", "hours": 0.5, "billable": true}, {"name": "J&J / Promo", "hours": 0.5, "billable": true}];
+  var PROJECTS = [{"name": "G&A / S&C Dept", "hours": 268.5, "billable": false}, {"name": "OKC / Foreword FD", "hours": 83.75, "billable": true}, {"name": "G&A / L&D General", "hours": 24.5, "billable": false}, {"name": "NSM / MPD Showcase", "hours": 16.75, "billable": true}, {"name": "J&J / Gesture Booth MPD", "hours": 0.5, "billable": true}, {"name": "J&J / Promo", "hours": 0.5, "billable": true}];
 
-  var PIE_BILLABLE = {"title": "Billable", "total": 99.5, "slices": [{"label": "Meetings", "hours": 47.5, "color": "--p-blue"}, {"label": "Comms", "hours": 17.75, "color": "--p-orange"}, {"label": "Project Planning", "hours": 16.75, "color": "--p-aqua"}, {"label": "Other", "hours": 17.5, "color": "--ink-muted-2"}]};
-  var PIE_NONBILLABLE = {"title": "Non-billable", "total": 287.5, "slices": [{"label": "Mgmt/Admin", "hours": 74.25, "color": "--p-orange"}, {"label": "Thought Leadership", "hours": 51.75, "color": "--p-blue"}, {"label": "Project Planning", "hours": 50.0, "color": "--p-aqua"}, {"label": "Other", "hours": 111.5, "color": "--ink-muted-2"}]};
+  var PIE_BILLABLE = {"title": "Billable", "total": 101.5, "slices": [{"label": "Meetings", "hours": 49.0, "color": "--p-blue"}, {"label": "Comms", "hours": 18.25, "color": "--p-orange"}, {"label": "Project Planning", "hours": 16.75, "color": "--p-aqua"}, {"label": "Other", "hours": 17.5, "color": "--ink-muted-2"}]};
+  var PIE_NONBILLABLE = {"title": "Non-billable", "total": 293.0, "slices": [{"label": "Mgmt/Admin", "hours": 74.75, "color": "--p-orange"}, {"label": "Thought Leadership", "hours": 53.25, "color": "--p-blue"}, {"label": "Project Planning", "hours": 50.0, "color": "--p-aqua"}, {"label": "Other", "hours": 115.0, "color": "--ink-muted-2"}]};
 
   // ---- stacked bar: billable vs non-billable ----
   (function () {
