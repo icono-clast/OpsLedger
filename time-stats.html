@@ -221,30 +221,30 @@
       <h1>Time &mdash; Stats</h1>
       <div class="subtitle">Billable mix and activity split, at a glance. See Detail for day-by-day breakdowns and Kantata for logging time.</div>
     </div>
-    <div class="period-badge"><span class="dot"></span>Synced Nov 6, 2026 &middot; 11:00pm</div>
+    <div class="period-badge"><span class="dot"></span>Synced Nov 7, 2026 &middot; 11:09pm</div>
   </div>
 
 
   <div class="stat-row">
     <div class="stat-tile hero">
       <div class="stat-label">% Billable</div>
-      <div class="stat-value">25.3<span class="unit">%</span></div>
-      <div class="meter-track"><div class="meter-fill" style="width:25.3%"></div></div>
-      <div class="stat-meta">98.5h billable of 389h logged</div>
+      <div class="stat-value">28<span class="unit">%</span></div>
+      <div class="meter-track"><div class="meter-fill" style="width:28%"></div></div>
+      <div class="stat-meta">121.8h billable of 434.5h logged</div>
     </div>
     <div class="stat-tile">
       <div class="stat-label">Total logged</div>
-      <div class="stat-value">389<span class="unit">hrs</span></div>
+      <div class="stat-value">434.5<span class="unit">hrs</span></div>
       <div class="stat-meta">10 weeks, 4 clients</div>
     </div>
     <div class="stat-tile">
       <div class="stat-label">Billable hours</div>
-      <div class="stat-value" style="color:var(--billable)">98.5<span class="unit">hrs</span></div>
+      <div class="stat-value" style="color:var(--billable)">121.8<span class="unit">hrs</span></div>
       <div class="stat-meta">client-facing work</div>
     </div>
     <div class="stat-tile">
       <div class="stat-label">Non-billable hours</div>
-      <div class="stat-value" style="color:var(--nonbillable)">290.5<span class="unit">hrs</span></div>
+      <div class="stat-value" style="color:var(--nonbillable)">312.8<span class="unit">hrs</span></div>
       <div class="stat-meta">G&amp;A / internal</div>
     </div>
   </div>
@@ -297,12 +297,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // ===================== Reporting section =====================
 
-  var WEEKLY = [{"label": "Aug 31", "full": "Week of Aug 31", "billable": 10.25, "nonbillable": 32.0, "partial": false}, {"label": "Sep 7", "full": "Week of Sep 7", "billable": 11.0, "nonbillable": 28.25, "partial": false}, {"label": "Sep 14", "full": "Week of Sep 14", "billable": 9.0, "nonbillable": 40.5, "partial": false}, {"label": "Sep 21", "full": "Week of Sep 21", "billable": 8.5, "nonbillable": 38.5, "partial": false}, {"label": "Sep 28", "full": "Week of Sep 28", "billable": 8.0, "nonbillable": 33.25, "partial": false}, {"label": "Oct 5", "full": "Week of Oct 5", "billable": 11.25, "nonbillable": 29.5, "partial": false}, {"label": "Oct 12", "full": "Week of Oct 12", "billable": 16.75, "nonbillable": 22.75, "partial": false}, {"label": "Oct 19", "full": "Week of Oct 19", "billable": 17.75, "nonbillable": 29.75, "partial": false}, {"label": "Oct 26", "full": "Week of Oct 26", "billable": 6.0, "nonbillable": 36.0, "partial": false}, {"label": "Nov 2", "full": "Week of Nov 2", "billable": 0.0, "nonbillable": 0.0, "partial": true}];
+  var WEEKLY = [{"label": "Aug 31", "full": "Week of Aug 31", "billable": 10.25, "nonbillable": 32.0, "partial": false}, {"label": "Sep 7", "full": "Week of Sep 7", "billable": 11.0, "nonbillable": 28.25, "partial": false}, {"label": "Sep 14", "full": "Week of Sep 14", "billable": 9.0, "nonbillable": 40.5, "partial": false}, {"label": "Sep 21", "full": "Week of Sep 21", "billable": 8.5, "nonbillable": 38.5, "partial": false}, {"label": "Sep 28", "full": "Week of Sep 28", "billable": 8.0, "nonbillable": 33.25, "partial": false}, {"label": "Oct 5", "full": "Week of Oct 5", "billable": 11.25, "nonbillable": 29.5, "partial": false}, {"label": "Oct 12", "full": "Week of Oct 12", "billable": 16.75, "nonbillable": 22.75, "partial": false}, {"label": "Oct 19", "full": "Week of Oct 19", "billable": 17.75, "nonbillable": 29.75, "partial": false}, {"label": "Oct 26", "full": "Week of Oct 26", "billable": 17.5, "nonbillable": 38.5, "partial": false}, {"label": "Nov 2", "full": "Week of Nov 2", "billable": 11.75, "nonbillable": 19.75, "partial": true}];
 
-  var PROJECTS = [{"name": "G&A / S&C Dept", "hours": 280.25, "billable": false}, {"name": "OKC / Foreword FD", "hours": 72.0, "billable": true}, {"name": "NSM / MPD Showcase", "hours": 14.25, "billable": true}, {"name": "THC / Promo", "hours": 12.75, "billable": true}, {"name": "G&A / L&D General", "hours": 9.75, "billable": false}];
+  var PROJECTS = [{"name": "G&A / S&C Dept", "hours": 302.25, "billable": false}, {"name": "OKC / Foreword FD", "hours": 93.75, "billable": true}, {"name": "NSM / MPD Showcase", "hours": 15.75, "billable": true}, {"name": "THC / Promo", "hours": 12.75, "billable": true}, {"name": "G&A / L&D General", "hours": 9.75, "billable": false}, {"name": "G&A / BD", "hours": 0.25, "billable": false}];
 
-  var PIE_BILLABLE = {"title": "Billable", "total": 98.5, "slices": [{"label": "Meetings", "hours": 41.0, "color": "--p-blue"}, {"label": "Comms", "hours": 23.0, "color": "--p-orange"}, {"label": "Project Planning", "hours": 18.5, "color": "--p-aqua"}, {"label": "Other", "hours": 16.0, "color": "--ink-muted-2"}]};
-  var PIE_NONBILLABLE = {"title": "Non-billable", "total": 290.5, "slices": [{"label": "Mgmt/Admin", "hours": 57.25, "color": "--p-orange"}, {"label": "Thought Leadership", "hours": 49.25, "color": "--p-blue"}, {"label": "Project Planning", "hours": 38.75, "color": "--p-aqua"}, {"label": "Other", "hours": 145.25, "color": "--ink-muted-2"}]};
+  var PIE_BILLABLE = {"title": "Billable", "total": 121.75, "slices": [{"label": "Meetings", "hours": 50.0, "color": "--p-blue"}, {"label": "Comms", "hours": 24.5, "color": "--p-orange"}, {"label": "Project Planning", "hours": 20.25, "color": "--p-aqua"}, {"label": "Other", "hours": 27.0, "color": "--ink-muted-2"}]};
+  var PIE_NONBILLABLE = {"title": "Non-billable", "total": 312.75, "slices": [{"label": "Mgmt/Admin", "hours": 61.75, "color": "--p-orange"}, {"label": "Thought Leadership", "hours": 49.25, "color": "--p-blue"}, {"label": "Meetings", "hours": 39.5, "color": "--p-aqua"}, {"label": "Other", "hours": 162.25, "color": "--ink-muted-2"}]};
 
   // ---- stacked bar: billable vs non-billable ----
   (function () {
